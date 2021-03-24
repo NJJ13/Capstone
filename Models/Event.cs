@@ -18,6 +18,8 @@ namespace FreshAir.Models
         [DataType(DataType.Date)]
         public DateTime? ScheduledTIme { get; set; }
         public string Accessibility { get; set; }
+        public double? LocationsLatitude { get; set; }
+        public double? LocationsLongitude { get; set; }
 
         [ForeignKey("AthleteId")]
         public int AthleteId { get; set; }

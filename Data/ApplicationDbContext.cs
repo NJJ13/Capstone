@@ -15,7 +15,8 @@ namespace FreshAir.Data
         {
         }
         public DbSet<Athlete> Athletes { get; set; }
-
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Location> Locations { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

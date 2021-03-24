@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using FreshAir.Services;
 
 namespace FreshAir
 {
@@ -44,6 +45,9 @@ namespace FreshAir
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddTransient<GeocodeServiceAthlete>();
+            services.AddTransient<GeocodeServiceLocation>();
+            services.AddTransient<DistanceMatrixService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

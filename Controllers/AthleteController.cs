@@ -9,6 +9,7 @@ using FreshAir.Data;
 using FreshAir.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using FreshAir.Services;
 
 namespace FreshAir.Controllers
 {
@@ -16,10 +17,16 @@ namespace FreshAir.Controllers
     public class AthleteController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly GeocodeServiceAthlete _geocodingServiceAthlete;
+        private readonly GeocodeServiceLocation _geocodingServiceLocation;
+        private readonly DistanceMatrixService _distanceMatrixService;
 
-        public AthleteController(ApplicationDbContext context)
+        public AthleteController(ApplicationDbContext context, GeocodeServiceAthlete athleteGeocode, GeocodeServiceLocation locationGeocode, DistanceMatrixService distanceMatrixService)
         {
             _context = context;
+            _geocodingServiceAthlete = athleteGeocode;
+            _geocodingServiceLocation = locationGeocode;
+            _distanceMatrixService = distanceMatrixService;
         }
 
         // GET: Athlete
@@ -27,6 +34,11 @@ namespace FreshAir.Controllers
         {
             var applicationDbContext = _context.Athletes.Include(a => a.IdentityUser);
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
+            if (athlete == null)
+            {
+                return RedirectToAction("Create");
+            }
             return View(await applicationDbContext.ToListAsync());
         }
 
