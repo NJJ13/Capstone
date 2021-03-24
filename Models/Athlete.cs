@@ -20,6 +20,11 @@ namespace FreshAir.Models
         public string SecondInterest { get; set; }
         public string ThirdInterest { get; set; }
         public string AthleticAbility { get; set; }
+        public byte[] ProfilePicture { get; set; }
+        public string LikedAthletes { get; set; }
+        public double? DistanceModifier { get; set; }
+        public double? AthleteLatitude { get; set; }
+        public double? AthleteLongitude { get; set; }
 
 
         [ForeignKey("IdentityUser")]
