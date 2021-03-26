@@ -17,7 +17,7 @@
                 <div class="center">
                     <div class="form-input">
                         <label asp-for="ProfilePicture">
-                            <img id="file-ip-1-preview" src="~/images/@ViewBag.Athlete">
+                            <img id="file-ip-1-preview" src="~/images/@ViewBag.Athlete" class="rounded-circle" width="300" height="300">
                         </label>
                         <input asp-for="ProfilePicture" accept="image/*" onchange="showPreviewOne(event);">
                     </div>

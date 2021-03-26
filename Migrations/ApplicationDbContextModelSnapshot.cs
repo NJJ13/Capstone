@@ -192,8 +192,8 @@ namespace FreshAir.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7a1c72fc-44ab-4e51-affc-d2db6d09bee0",
-                            ConcurrencyStamp = "dd7b91d3-4632-40d9-a9bb-8b1161c601fa",
+                            Id = "b3ad417f-c46f-420e-8d68-5bce8fedb216",
+                            ConcurrencyStamp = "1fbefca2-9491-4c56-857e-e95af252e8be",
                             Name = "Athlete",
                             NormalizedName = "ATHLETE"
                         });

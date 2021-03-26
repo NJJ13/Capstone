@@ -57,7 +57,7 @@ namespace FreshAir.Migrations
                     State = table.Column<string>(nullable: true),
                     ZipCode = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    Picture = table.Column<byte[]>(nullable: true),
+                    Picture = table.Column<string>(nullable: true),
                     LocationLatitude = table.Column<double>(nullable: true),
                     LocationLongitude = table.Column<double>(nullable: true)
                 },
@@ -243,7 +243,7 @@ namespace FreshAir.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "38aec406-0e4d-4634-9615-02d235c35686", "2eb5c831-cfd9-4217-8384-e327788ab917", "Athlete", "ATHLETE" });
+                values: new object[] { "b3ad417f-c46f-420e-8d68-5bce8fedb216", "1fbefca2-9491-4c56-857e-e95af252e8be", "Athlete", "ATHLETE" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
