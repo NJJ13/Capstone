@@ -1,17 +1,19 @@
-﻿@model FreshAir.ViewModels.AthleteViewModel
+﻿@model FreshAir.Models.Athlete
 
 @{
-    ViewData["Title"] = "Design Your Profile";
+    ViewData["Title"] = "Edit Your Information";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Design Your Profile</h1>
+<h1>Edit Your Information</h1>
 
+<h4>Athlete</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateVM" enctype="multipart/form-data">
+        <form asp-action="EditAthlete">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AthleteId" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
@@ -225,35 +227,8 @@
                 </select>
                 <span asp-validation-for="AthleticAbility" class="text-danger"></span>
             </div>
-            <div class="image-upload-one">
-                <div class="center">
-                    <div class="form-input">
-                        <label asp-for="ProfilePicture">
-                            <img id="file-ip-1-preview" src="~/images/anon.png">
-                        </label>
-                        <input asp-for="ProfilePicture" accept="image/*" onchange="showPreviewOne(event);">
-                    </div>
-                    <span asp-validation-for="ProfilePicture" class="text-danger"></span>
-                </div>
-            </div>
-            <br />
-            <script>
-
-                function showPreviewOne(event) {
-                    if (event.target.files.length > 0) {
-                        let src = URL.createObjectURL(event.target.files[0]);
-                        let preview = document.getElementById("file-ip-1-preview");
-                        preview.src = src;
-                        preview.style.display = "block";
-                    }
-                }
-                function myImgRemoveFunctionOne() {
-                    document.getElementById("file-ip-1-preview").src = "~/images/anon.png";
-                }
-
-            </script>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>

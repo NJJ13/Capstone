@@ -34,7 +34,8 @@ namespace FreshAir.Controllers
         // GET: LocationController
         public ActionResult Index()
         {
-            return View();
+            var locations = _context.Locations;
+            return View(locations);
         }
 
         // GET: LocationController/Details/5
@@ -44,7 +45,7 @@ namespace FreshAir.Controllers
         }
 
         // GET: LocationController/Create
-        public ActionResult Create()
+        public ActionResult CreateLocation()
         {
             return View();
         }
@@ -54,30 +55,27 @@ namespace FreshAir.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateLocation(LocationViewModel locationVM)
         {
-            if (ModelState.IsValid)
+            
+            string stringFileName = ProcessLocationFile(locationVM);
+            var location = new Location
             {
-                string stringFileName = ProcessLocationFile(locationVM);
-                var location = new Location
-                {
-                    Address = locationVM.Address,
-                    City = locationVM.City,
-                    State = locationVM.State,
-                    ZipCode = locationVM.ZipCode,
-                    Description = locationVM.Description,
-                    Picture = stringFileName
-                };
-                var locationWithLatandLong = await _geocodingServiceLocation.GetGeocoding(location);
+                Address = locationVM.Address,
+                City = locationVM.City,
+                State = locationVM.State,
+                ZipCode = locationVM.ZipCode,
+                Description = locationVM.Description,
+                Picture = stringFileName
+            };
+            var locationWithLatandLong = await _geocodingServiceLocation.GetGeocoding(location);
 
-                if (locationWithLatandLong.Picture == null)
-                {
-                    locationWithLatandLong.Picture = "no-image.jpg";
-                }
-                _context.Add(locationWithLatandLong);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("index", "Athlete");
+            if (locationWithLatandLong.Picture == null)
+            {
+                locationWithLatandLong.Picture = "no-image.jpg";
             }
+            _context.Locations.Add(locationWithLatandLong);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "Athlete");
 
-            return View(locationVM);
         }
 
         // GET: LocationController/Edit/5

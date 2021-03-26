@@ -94,7 +94,7 @@ namespace FreshAir.Controllers
             {
                 athleteWithLatandLong.ProfilePicture = "anon.png";
             }
-            _context.Add(athleteWithLatandLong);
+            _context.Athletes.Add(athleteWithLatandLong);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -131,8 +131,49 @@ namespace FreshAir.Controllers
             return View(athlete);
         }
 
+        public IActionResult GoCreateNewLocation()
+        {
+            return RedirectToAction("CreateLocation", "Location");
+        }
+        
+        public async Task<IActionResult> EditProfilePicture(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var athlete = await _context.Athletes.FindAsync(id);
+            var athleteVM = new AthleteViewModel();
+            if (athlete == null)
+            {
+                return NotFound();
+            }
+            ViewBag.Athlete = athlete.ProfilePicture;
+            //ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", athlete.IdentityUserId);
+            return View(athleteVM);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditProfilePicture(int? id, AthleteViewModel athleteVM)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var athlete = await _context.Athletes.FindAsync(id);
+            ViewBag.Athlete = athlete.ProfilePicture;
+            if (athlete == null)
+            {
+                return NotFound();
+            }
+            string stringFileName = ProcessUploadedFile(athleteVM);
+            athlete.ProfilePicture = stringFileName;
+            await _context.SaveChangesAsync();
+            //ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", athlete.IdentityUserId);
+            return RedirectToAction("Index");
+        }
         // GET: Athlete/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> EditAthlete(int? id)
         {
             if (id == null)
             {
@@ -153,7 +194,7 @@ namespace FreshAir.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AthleteId,IdentityUserId")] Athlete athlete)
+        public async Task<IActionResult> EditAthlete(int id, Athlete athlete)
         {
             if (id != athlete.AthleteId)
             {
@@ -162,9 +203,22 @@ namespace FreshAir.Controllers
 
             if (ModelState.IsValid)
             {
+                var athleteToUpdate = _context.Athletes.Find(id);
                 try
                 {
-                    _context.Update(athlete);
+                    
+                    athleteToUpdate.FirstName = athlete.FirstName;
+                    athleteToUpdate.LastName = athlete.LastName;
+                    athleteToUpdate.State = athlete.State;
+                    athleteToUpdate.ZipCode = athlete.ZipCode;
+                    athleteToUpdate.FirstInterest = athlete.FirstInterest;
+                    athleteToUpdate.SecondInterest = athlete.SecondInterest;
+                    athleteToUpdate.ThirdInterest = athlete.ThirdInterest;
+                    athleteToUpdate.AthleticAbility = athlete.AthleticAbility;
+                    var updatedGeocodeAthlete = await _geocodingServiceAthlete.GetGeocoding(athlete);
+                    athleteToUpdate.AthleteLatitude = updatedGeocodeAthlete.AthleteLatitude;
+                    athleteToUpdate.AthleteLongitude = updatedGeocodeAthlete.AthleteLongitude;
+                    _context.Update(athleteToUpdate);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -178,7 +232,7 @@ namespace FreshAir.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", athlete.IdentityUserId);
             return View(athlete);

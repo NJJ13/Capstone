@@ -1,0 +1,56 @@
+﻿@model FreshAir.ViewModels.AthleteViewModel
+
+@{
+    ViewData["Title"] = "Update Profile Picture";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Update Profile Picture</h1>
+
+<h4>AthleteViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditProfilePicture" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="image-upload-one">
+                <div class="center">
+                    <div class="form-input">
+                        <label asp-for="ProfilePicture">
+                            <img id="file-ip-1-preview" src="~/images/@ViewBag.Athlete">
+                        </label>
+                        <input asp-for="ProfilePicture" accept="image/*" onchange="showPreviewOne(event);">
+                    </div>
+                    <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <script>
+
+                function showPreviewOne(event) {
+                    if (event.target.files.length > 0) {
+                        let src = URL.createObjectURL(event.target.files[0]);
+                        let preview = document.getElementById("file-ip-1-preview");
+                        preview.src = src;
+                        preview.style.display = "block";
+                    }
+                }
+                function myImgRemoveFunctionOne() {
+                    document.getElementById("file-ip-1-preview").src = "~/images/@ViewBag.Atlete";
+                }
+
+            </script>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
