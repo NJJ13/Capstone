@@ -1,27 +1,27 @@
-﻿@model FreshAir.Models.Athlete
+﻿@model FreshAir.ViewModels.LocationViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "CreateLocation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
-<h1>Create</h1>
 
-<h4>Athlete</h4>
+<h1>CreateLocation</h1>
+
+<h4>LocationViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateLocation" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="State" class="control-label"></label>
@@ -86,25 +86,15 @@
                 <input asp-for="ZipCode" class="form-control" />
                 <span asp-validation-for="ZipCode" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FirstInterest" class="control-label"></label>
-                <input asp-for="FirstInterest" class="form-control" />
-                <span asp-validation-for="FirstInterest" class="text-danger"></span>
+            <div class="form-control">
+                <label asp-for="Picture" class="control-label"></label>
+                <input asp-for="Picture" class="form-control" />
+                <span asp-validation-for="Picture" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SecondInterest" class="control-label"></label>
-                <input asp-for="SecondInterest" class="form-control" />
-                <span asp-validation-for="SecondInterest" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ThirdInterest" class="control-label"></label>
-                <input asp-for="ThirdInterest" class="form-control" />
-                <span asp-validation-for="ThirdInterest" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AthleticAbility" class="control-label"></label>
-                <input asp-for="AthleticAbility" class="form-control" />
-                <span asp-validation-for="AthleticAbility" class="text-danger"></span>
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
