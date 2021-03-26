@@ -16,6 +16,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FreshAir.Services;
+using FreshAir.Hubs;
 
 namespace FreshAir
 {
@@ -31,6 +32,7 @@ namespace FreshAir
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -42,8 +44,11 @@ namespace FreshAir
             {
                 config.Filters.Add(typeof(GlobalRouting));
             });
-
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                o.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
             services.AddRazorPages();
             services.AddTransient<GeocodeServiceAthlete>();
             services.AddTransient<GeocodeServiceLocation>();
@@ -78,6 +83,8 @@ namespace FreshAir
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<ChatHub>("/chatHub");
+
             });
         }
     }

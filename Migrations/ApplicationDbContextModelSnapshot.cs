@@ -4,22 +4,164 @@ using FreshAir.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace FreshAir.Data.Migrations
+namespace FreshAir.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210324134543_init")]
-    partial class init
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("FreshAir.Models.Athlete", b =>
+                {
+                    b.Property<int>("AthleteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double?>("AthleteLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("AthleteLongitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("AthleticAbility")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("DistanceModifier")
+                        .HasColumnType("float");
+
+                    b.Property<string>("FirstInterest")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LikedAthletes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecondInterest")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThirdInterest")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AthleteId");
+
+                    b.HasIndex("IdentityUserId");
+
+                    b.ToTable("Athletes");
+                });
+
+            modelBuilder.Entity("FreshAir.Models.Event", b =>
+                {
+                    b.Property<int>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Accessibility")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Activity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AthleteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AthleticAbility")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AttendanceCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Attendees")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("LocationsLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("LocationsLongitude")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("ScheduledTIme")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SkillLevel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EventId");
+
+                    b.HasIndex("AthleteId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("FreshAir.Models.Location", b =>
+                {
+                    b.Property<int>("LocationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("LocationLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("LocationLongitude")
+                        .HasColumnType("float");
+
+                    b.Property<byte[]>("Picture")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LocationId");
+
+                    b.ToTable("Locations");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -50,8 +192,8 @@ namespace FreshAir.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2cee0b3a-ba4d-4ea5-9353-f72cf6da09fa",
-                            ConcurrencyStamp = "5deba590-ad80-4349-8889-b53b7d2d264b",
+                            Id = "38aec406-0e4d-4634-9615-02d235c35686",
+                            ConcurrencyStamp = "2eb5c831-cfd9-4217-8384-e327788ab917",
                             Name = "Athlete",
                             NormalizedName = "ATHLETE"
                         });
@@ -224,6 +366,28 @@ namespace FreshAir.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("FreshAir.Models.Athlete", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId");
+                });
+
+            modelBuilder.Entity("FreshAir.Models.Event", b =>
+                {
+                    b.HasOne("FreshAir.Models.Athlete", "Athlete")
+                        .WithMany()
+                        .HasForeignKey("AthleteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FreshAir.Models.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

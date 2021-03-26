@@ -1,17 +1,17 @@
-﻿@model FreshAir.Models.Athlete
+﻿@model FreshAir.ViewModels.AthleteViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "CreateVM";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
-<h1>Create</h1>
 
-<h4>Athlete</h4>
+<h1>CreateVM</h1>
+
+<h4>AthleteViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateVM" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
@@ -105,6 +105,11 @@
                 <label asp-for="AthleticAbility" class="control-label"></label>
                 <input asp-for="AthleticAbility" class="form-control" />
                 <span asp-validation-for="AthleticAbility" class="text-danger"></span>
+            </div>
+            <div class="form-control">
+                <label asp-for="ProfilePicture" class="control-label"></label>
+                <input asp-for="ProfilePicture" class="form-control" />
+                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

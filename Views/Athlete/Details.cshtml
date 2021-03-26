@@ -11,12 +11,9 @@
     <h4>Athlete</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdentityUser)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdentityUser.Id)
-        </dd>
+        <div>
+            <img src="~/images/@Model.ProfilePicture"  class="rounded-circle" width="200" height="200" asp-append-version="true" />
+        </div>
     </dl>
 </div>
 <div>
