@@ -19,6 +19,11 @@ namespace FreshAir.Data
         {
             base.OnModelCreating(builder);
             builder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Athlete", NormalizedName = "ATHLETE" });
+
+            builder.Entity<AthleteEvent>().HasKey(ae => new { ae.AthleteId, ae.EventId });
+            builder.Entity<AthleteEvent>().HasOne(ae => ae.Athlete).WithMany(ae => ae.Events).HasForeignKey(ae => ae.AthleteId);
+            builder.Entity<AthleteEvent>().HasOne(ae => ae.Event).WithMany(ae => ae.Attendees).HasForeignKey(ae => ae.EventId);
+
         }
         public DbSet<Athlete> Athletes { get; set; }
         public DbSet<Event> Events { get; set; }

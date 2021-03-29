@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FreshAir.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210326211937_1")]
+    [Migration("20210329151849_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,6 +77,21 @@ namespace FreshAir.Migrations
                     b.ToTable("Athletes");
                 });
 
+            modelBuilder.Entity("FreshAir.Models.AthleteEvent", b =>
+                {
+                    b.Property<int>("AthleteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AthleteId", "EventId");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("AthleteEvent");
+                });
+
             modelBuilder.Entity("FreshAir.Models.Event", b =>
                 {
                     b.Property<int>("EventId")
@@ -90,20 +105,17 @@ namespace FreshAir.Migrations
                     b.Property<string>("Activity")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AthleteId")
-                        .HasColumnType("int");
-
                     b.Property<string>("AthleticAbility")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AttendanceCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Attendees")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HostAthleteId")
+                        .HasColumnType("int");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
@@ -122,7 +134,7 @@ namespace FreshAir.Migrations
 
                     b.HasKey("EventId");
 
-                    b.HasIndex("AthleteId");
+                    b.HasIndex("HostAthleteId");
 
                     b.HasIndex("LocationId");
 
@@ -194,8 +206,8 @@ namespace FreshAir.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b3ad417f-c46f-420e-8d68-5bce8fedb216",
-                            ConcurrencyStamp = "1fbefca2-9491-4c56-857e-e95af252e8be",
+                            Id = "816c7c0c-856b-4e01-a611-ea11685e4d6a",
+                            ConcurrencyStamp = "da4c5551-4b15-4b1b-bf4f-cf63d5869c71",
                             Name = "Athlete",
                             NormalizedName = "ATHLETE"
                         });
@@ -377,11 +389,26 @@ namespace FreshAir.Migrations
                         .HasForeignKey("IdentityUserId");
                 });
 
-            modelBuilder.Entity("FreshAir.Models.Event", b =>
+            modelBuilder.Entity("FreshAir.Models.AthleteEvent", b =>
                 {
                     b.HasOne("FreshAir.Models.Athlete", "Athlete")
-                        .WithMany()
+                        .WithMany("Events")
                         .HasForeignKey("AthleteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FreshAir.Models.Event", "Event")
+                        .WithMany("Attendees")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FreshAir.Models.Event", b =>
+                {
+                    b.HasOne("FreshAir.Models.Athlete", "HostAthlete")
+                        .WithMany()
+                        .HasForeignKey("HostAthleteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

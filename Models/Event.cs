@@ -20,12 +20,12 @@ namespace FreshAir.Models
         public string Accessibility { get; set; }
         public double? LocationsLatitude { get; set; }
         public double? LocationsLongitude { get; set; }
-        public string Attendees { get; set; }
+        public ICollection<AthleteEvent> Attendees { get; set; }
         public int AttendanceCount { get; set; }
 
         [ForeignKey("AthleteId")]
-        public int AthleteId { get; set; }
-        public Athlete Athlete { get; set; }
+        public int HostAthleteId { get; set; }
+        public Athlete HostAthlete { get; set; }
 
         [ForeignKey("LocationId")]
         public int LocationId { get; set; }

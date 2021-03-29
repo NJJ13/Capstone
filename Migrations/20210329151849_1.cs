@@ -218,17 +218,16 @@ namespace FreshAir.Migrations
                     Accessibility = table.Column<string>(nullable: true),
                     LocationsLatitude = table.Column<double>(nullable: true),
                     LocationsLongitude = table.Column<double>(nullable: true),
-                    Attendees = table.Column<string>(nullable: true),
                     AttendanceCount = table.Column<int>(nullable: false),
-                    AthleteId = table.Column<int>(nullable: false),
+                    HostAthleteId = table.Column<int>(nullable: false),
                     LocationId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Events", x => x.EventId);
                     table.ForeignKey(
-                        name: "FK_Events_Athletes_AthleteId",
-                        column: x => x.AthleteId,
+                        name: "FK_Events_Athletes_HostAthleteId",
+                        column: x => x.HostAthleteId,
                         principalTable: "Athletes",
                         principalColumn: "AthleteId",
                         onDelete: ReferentialAction.Cascade);
@@ -240,10 +239,34 @@ namespace FreshAir.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AthleteEvent",
+                columns: table => new
+                {
+                    AthleteId = table.Column<int>(nullable: false),
+                    EventId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AthleteEvent", x => new { x.AthleteId, x.EventId });
+                    table.ForeignKey(
+                        name: "FK_AthleteEvent_Athletes_AthleteId",
+                        column: x => x.AthleteId,
+                        principalTable: "Athletes",
+                        principalColumn: "AthleteId",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_AthleteEvent_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "EventId",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "b3ad417f-c46f-420e-8d68-5bce8fedb216", "1fbefca2-9491-4c56-857e-e95af252e8be", "Athlete", "ATHLETE" });
+                values: new object[] { "816c7c0c-856b-4e01-a611-ea11685e4d6a", "da4c5551-4b15-4b1b-bf4f-cf63d5869c71", "Athlete", "ATHLETE" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -285,14 +308,19 @@ namespace FreshAir.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AthleteEvent_EventId",
+                table: "AthleteEvent",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Athletes_IdentityUserId",
                 table: "Athletes",
                 column: "IdentityUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Events_AthleteId",
+                name: "IX_Events_HostAthleteId",
                 table: "Events",
-                column: "AthleteId");
+                column: "HostAthleteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_LocationId",
@@ -318,10 +346,13 @@ namespace FreshAir.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Events");
+                name: "AthleteEvent");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Events");
 
             migrationBuilder.DropTable(
                 name: "Athletes");
