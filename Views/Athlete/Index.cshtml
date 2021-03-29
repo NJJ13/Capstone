@@ -5,39 +5,20 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Fresh Air</h1>
 
 <p>
-    <a asp-action="CreateVM">Create New</a>
     <a asp-action="GoCreateNewLocation">Create Location</a>
 </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                <a asp-action="EditAthlete" asp-route-id="@item.AthleteId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AthleteId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AthleteId">Delete</a>
-            </td>
-        </tr>
+@foreach (var item in Model)
+{ 
+<div class="card" style="width: 18rem;">
+  <img src = "~/images/@item.ProfilePicture" class="card-img-top" alt="ProfilePicture">
+  <div class="card-body">
+      <p class="card-text">
+          <a asp-action="Details" asp-route-id="@item.AthleteId">Details</a>
+      </p>
+  </div>
+</div>
 }
-    </tbody>
-</table>
