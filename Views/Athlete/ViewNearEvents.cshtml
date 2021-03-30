@@ -1,0 +1,109 @@
+﻿@model IEnumerable<FreshAir.Models.Event>
+
+@{
+    ViewData["Title"] = "ViewNearEvents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Events Happening Near you</h1>
+
+
+<div id="list-events" class="list-group">
+    @foreach (var item in Model)
+    {
+        <a class="list-group-item list-group-item-action" asp-action="Details" asp-route-id="@item.EventId">@item.Activity</a>
+    }
+</div>
+<div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+    @foreach (var item in Model)
+    {
+    <h4 id="list-Event-item">@item.Activity</h4>
+        <p>@item.ScheduledTIme</p>
+        <p>@item.Description</p>
+    }
+</div>
+    @*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Activity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AthleticAbility)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SkillLevel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ScheduledTIme)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accessibility)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LocationsLatitude)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LocationsLongitude)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AttendanceCount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HostAthlete)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Activity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AthleticAbility)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SkillLevel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ScheduledTIme)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Accessibility)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LocationsLatitude)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LocationsLongitude)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AttendanceCount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HostAthlete.AthleteId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location.LocationId)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.EventId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@

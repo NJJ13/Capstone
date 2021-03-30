@@ -131,19 +131,20 @@ namespace FreshAir.Controllers
             return View(athlete);
         }
 
-        public async Task<IActionResult> CreateEvent(int? eventLocationId)
+        public IActionResult CreateEvent(int? id)
         {
-            var location = _context.Locations.Find(eventLocationId);
-            ViewBag.Location = location;
+            var location = _context.Locations.Find(id);
+            ViewBag.LocationPicture = location.Picture;
+            ViewBag.LocationInfo = location.Description;
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateEvent(int eventLocationId, Event newEvent)
+        public async Task<IActionResult> CreateEvent(int? id, Event newEvent)
         {
             if (ModelState.IsValid)
             {
-                var location = _context.Locations.Find(eventLocationId);
+                var location = _context.Locations.Find(id);
                 newEvent.LocationsLatitude = location.LocationLatitude;
                 newEvent.LocationsLongitude = location.LocationLongitude;
                 newEvent.Location = location;
@@ -171,12 +172,12 @@ namespace FreshAir.Controllers
             var applicationDbContext = _context.Athletes.Include(a => a.IdentityUser);
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
-            var locations = _context.Locations;
+            var locations = _context.Locations.Where(l => l.LocationId != 0).ToList();
             List<Location> nearbyLocations = new List<Location>();
             foreach (var place in locations)
             {
                 var distanceAway = await _distanceMatrixService.GetDistanceLocation(athlete, place);
-                if (distanceAway > athlete.DistanceModifier)
+                if (distanceAway < athlete.DistanceModifier)
                 {
                     nearbyLocations.Add(place);
                 }
@@ -188,17 +189,23 @@ namespace FreshAir.Controllers
             var applicationDbContext = _context.Athletes.Include(a => a.IdentityUser);
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
-            var events = _context.Events;
+            var events = _context.Events.Where(e => e.HostAthleteId != athlete.AthleteId);
             List<Event> nearbyEvents = new List<Event>();
             foreach (var differentEvent in events)
             {
                 var distanceAway = await _distanceMatrixService.GetDistanceEvent(athlete, differentEvent);
-                if (distanceAway > athlete.DistanceModifier)
+                if (distanceAway < athlete.DistanceModifier)
                 {
                     nearbyEvents.Add(differentEvent);
                 }
             }
             return View(nearbyEvents);
+        }
+        public IActionResult HostedEvents(int? id)
+        {
+            var athlete = _context.Athletes.Find(id);
+            var hostedEvents = _context.Events.Where(e => e.HostAthleteId == athlete.AthleteId);
+            return View(hostedEvents);
         }
 
         public async Task<IActionResult> EditProfilePicture(int? id)
