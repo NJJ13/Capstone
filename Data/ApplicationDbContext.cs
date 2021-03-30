@@ -24,9 +24,12 @@ namespace FreshAir.Data
             builder.Entity<AthleteEvent>().HasOne(ae => ae.Athlete).WithMany(ae => ae.Events).HasForeignKey(ae => ae.AthleteId);
             builder.Entity<AthleteEvent>().HasOne(ae => ae.Event).WithMany(ae => ae.Attendees).HasForeignKey(ae => ae.EventId);
 
+            builder.Entity<FriendsList>().HasKey(fl => new { fl.CurrentUserId, fl.FriendId });
+
         }
         public DbSet<Athlete> Athletes { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<FriendsList> FriendsLists { get; set; }
     }
 }

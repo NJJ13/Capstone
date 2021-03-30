@@ -21,6 +21,7 @@
             <h3 class="card-title">@item.ScheduledTIme</h3>
             <p class="card-text">@item.Description</p>
             <a asp-action="EventDetails" asp-route-id="@item.EventId" class="btn btn-primary">Event Info</a>
+            <a asp-action="EditEvent" asp-route-id="@item.EventId" class="btn btn-primary">Event Info</a>
         </div>
     </div>
 }

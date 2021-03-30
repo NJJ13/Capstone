@@ -36,7 +36,7 @@ namespace FreshAir.Controllers
         }
 
         // GET: Athlete
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var athlete = GetCurrentUser();
             if (athlete == null)
@@ -190,6 +190,66 @@ namespace FreshAir.Controllers
             ViewBag.LocationDescription = location.Description;
             return View(theEvent);
         }
+        public async Task<IActionResult> EditEvent(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var Event = await _context.Events.FindAsync(id);
+            var location = _context.Locations.Find(Event.LocationId);
+            ViewBag.LocationPicture = location.Picture;
+            ViewBag.LocationInfo = location.Description;
+            if (Event == null)
+            {
+                return NotFound();
+            }
+            return View(Event);
+        }
+
+        // POST: Athlete/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditEvent(int? id, Event Event)
+        {
+            if (id != Event.EventId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var eventToUpdate = _context.Events.Find(id);
+                try
+                {
+
+                    eventToUpdate.ScheduledTIme = Event.ScheduledTIme;
+                    eventToUpdate.Activity = Event.Activity;
+                    eventToUpdate.AthleticAbility = Event.AthleticAbility;
+                    eventToUpdate.Accessibility = Event.Accessibility;
+                    eventToUpdate.Description = Event.Description;
+                    eventToUpdate.SkillLevel = Event.SkillLevel;
+                    _context.Update(eventToUpdate);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AthleteExists(Event.EventId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            return View(Event);
+        }
         public IActionResult GoCreateNewLocation()
         {
             return RedirectToAction("CreateLocation", "Location");
@@ -213,7 +273,7 @@ namespace FreshAir.Controllers
         public async Task<IActionResult> ViewNearEvents()
         {
             var athlete = GetCurrentUser();
-            var events = _context.Events.Where(e => e.HostAthleteId != athlete.AthleteId);
+            var events = _context.Events.Where(e => e.EventId != 0);
             List<Event> nearbyEvents = new List<Event>();
             foreach (var differentEvent in events)
             {
