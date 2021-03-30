@@ -88,7 +88,7 @@ namespace FreshAir.Controllers
             };
             athlete.IdentityUserId = userId;
             var athleteWithLatandLong = await _geocodingServiceAthlete.GetGeocoding(athlete);
-            athleteWithLatandLong.DistanceModifier = 20;
+            athleteWithLatandLong.DistanceModifier = 5;
 
             if(athleteWithLatandLong.ProfilePicture == null)
             {
@@ -131,11 +131,76 @@ namespace FreshAir.Controllers
             return View(athlete);
         }
 
+        public async Task<IActionResult> CreateEvent(int? eventLocationId)
+        {
+            var location = _context.Locations.Find(eventLocationId);
+            ViewBag.Location = location;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateEvent(int eventLocationId, Event newEvent)
+        {
+            if (ModelState.IsValid)
+            {
+                var location = _context.Locations.Find(eventLocationId);
+                newEvent.LocationsLatitude = location.LocationLatitude;
+                newEvent.LocationsLongitude = location.LocationLongitude;
+                newEvent.Location = location;
+                newEvent.LocationId = location.LocationId;
+                var applicationDbContext = _context.Athletes.Include(a => a.IdentityUser);
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
+                newEvent.HostAthlete = athlete;
+                newEvent.HostAthleteId = athlete.AthleteId;
+
+                _context.Events.Add(newEvent);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
         public IActionResult GoCreateNewLocation()
         {
             return RedirectToAction("CreateLocation", "Location");
         }
         
+        public async Task<IActionResult> ViewNearLocations()
+        {
+            var applicationDbContext = _context.Athletes.Include(a => a.IdentityUser);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
+            var locations = _context.Locations;
+            List<Location> nearbyLocations = new List<Location>();
+            foreach (var place in locations)
+            {
+                var distanceAway = await _distanceMatrixService.GetDistanceLocation(athlete, place);
+                if (distanceAway > athlete.DistanceModifier)
+                {
+                    nearbyLocations.Add(place);
+                }
+            }
+            return View(nearbyLocations);
+        }
+        public async Task<IActionResult> ViewNearEvents()
+        {
+            var applicationDbContext = _context.Athletes.Include(a => a.IdentityUser);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
+            var events = _context.Events;
+            List<Event> nearbyEvents = new List<Event>();
+            foreach (var differentEvent in events)
+            {
+                var distanceAway = await _distanceMatrixService.GetDistanceEvent(athlete, differentEvent);
+                if (distanceAway > athlete.DistanceModifier)
+                {
+                    nearbyEvents.Add(differentEvent);
+                }
+            }
+            return View(nearbyEvents);
+        }
+
         public async Task<IActionResult> EditProfilePicture(int? id)
         {
             if (id == null)
