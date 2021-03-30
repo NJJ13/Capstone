@@ -38,9 +38,7 @@ namespace FreshAir.Controllers
         // GET: Athlete
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Athletes.Include(a => a.IdentityUser);
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
+            var athlete = GetCurrentUser();
             if (athlete == null)
             {
                 return RedirectToAction("CreateVM");
@@ -50,6 +48,16 @@ namespace FreshAir.Controllers
         }
 
         // GET: Athlete/Details/5
+        public IActionResult MyDetails()
+        {
+            var athlete = GetCurrentUser();
+            if (athlete == null)
+            {
+                return NotFound();
+            }
+
+            return View(athlete);
+        }
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -162,6 +170,26 @@ namespace FreshAir.Controllers
             return View();
         }
 
+        public IActionResult EventDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var theEvent = _context.Events.Find(id);
+            if (theEvent == null)
+            {
+                return NotFound();
+            }
+            var hostAthlete = _context.Athletes.Find(theEvent.HostAthleteId);
+            var location = _context.Locations.Find(theEvent.LocationId);
+            ViewBag.HostPicture = hostAthlete.ProfilePicture;
+            ViewBag.HostAthleteName = (hostAthlete.FirstName + " " + hostAthlete.LastName);
+            ViewBag.LocationPicture = location.Picture;
+            ViewBag.LocationDescription = location.Description;
+            return View(theEvent);
+        }
         public IActionResult GoCreateNewLocation()
         {
             return RedirectToAction("CreateLocation", "Location");
@@ -169,9 +197,7 @@ namespace FreshAir.Controllers
         
         public async Task<IActionResult> ViewNearLocations()
         {
-            var applicationDbContext = _context.Athletes.Include(a => a.IdentityUser);
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
+            var athlete = GetCurrentUser();
             var locations = _context.Locations.Where(l => l.LocationId != 0).ToList();
             List<Location> nearbyLocations = new List<Location>();
             foreach (var place in locations)
@@ -186,9 +212,7 @@ namespace FreshAir.Controllers
         }
         public async Task<IActionResult> ViewNearEvents()
         {
-            var applicationDbContext = _context.Athletes.Include(a => a.IdentityUser);
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
+            var athlete = GetCurrentUser();
             var events = _context.Events.Where(e => e.HostAthleteId != athlete.AthleteId);
             List<Event> nearbyEvents = new List<Event>();
             foreach (var differentEvent in events)
@@ -201,9 +225,9 @@ namespace FreshAir.Controllers
             }
             return View(nearbyEvents);
         }
-        public IActionResult HostedEvents(int? id)
+        public IActionResult HostedEvents()
         {
-            var athlete = _context.Athletes.Find(id);
+            var athlete = GetCurrentUser();
             var hostedEvents = _context.Events.Where(e => e.HostAthleteId == athlete.AthleteId);
             return View(hostedEvents);
         }
@@ -359,6 +383,14 @@ namespace FreshAir.Controllers
                 }
             }
             return newFileName;
+        }
+
+        public Athlete GetCurrentUser()
+        {
+            var applicationDbContext = _context.Athletes.Include(a => a.IdentityUser);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
+            return athlete;
         }
     }
 }

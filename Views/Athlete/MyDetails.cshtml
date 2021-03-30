@@ -1,11 +1,11 @@
 ﻿@model FreshAir.Models.Athlete
 
 @{
-    ViewData["Title"] = "Athlete Details";
+    ViewData["Title"] = "MyDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>About This Athlete</h1>
+<h1>Your Information</h1>
 
 <div>
     <h4>@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</h4>
@@ -16,6 +16,18 @@
         </div>
     </dl>
     <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.State)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ZipCode)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ZipCode)
+        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FirstInterest)
         </dt>
@@ -40,8 +52,17 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AthleticAbility)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DistanceModifier)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DistanceModifier)
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Index">Back to Home</a>
+    <a asp-action="Edit" asp-route-id="@Model.AthleteId">Edit Your Information</a> |
+    <a asp-action="EditProfilePicture" asp-route-id="@Model.AthleteId">Update Profile Picture</a> |
+    <a asp-action="Index">Back to List</a>
 </div>
+

@@ -24,16 +24,16 @@
   <div class="card-body">
       <p class="card-text">
           <div>
-              <a asp-action="Details" asp-route-id="@item.AthleteId">View Your Info</a>
+              <a asp-action="MyDetails">View Your Info</a>
           </div>
           <div>
               <a asp-action="FriendsList" asp-route-id="@item.AthleteId">Friend's List</a>
           </div>
           <div>
-              <a asp-action="HostedEvents" asp-route-id="@item.AthleteId">Events You're Hosting</a>
+              <a asp-action="HostedEvents">Events You're Hosting</a>
           </div>
           <div>
-              <a asp-action="EventsAttending" asp-route-id="@item.AthleteId">Events You're Attending</a>
+              <a asp-action="EventsAttending">Events You're Attending</a>
           </div>
       </p>
   </div>

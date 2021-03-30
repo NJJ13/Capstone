@@ -1,0 +1,48 @@
+﻿@model FreshAir.Models.Event
+
+@{
+    ViewData["Title"] = "Event Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Event Details</h1>
+
+<div>
+    <div class="card" style="width: 25rem;">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Activity</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Scheduled Time: @Model.ScheduledTIme</h6>
+            <p class="card-text">
+                <div>Event Info: @Model.Description</div>
+
+                <div>Skill Level: @Model.SkillLevel</div>
+
+                <div>Athletic Ability: @Model.AthleticAbility</div>
+
+                <div>Number of Attendees: @Model.AttendanceCount</div>
+
+                <div>Accessibliity: @Model.AthleticAbility</div>
+            </p>
+            <a href="#" class="card-link">Attend Event</a>
+            <a href="#" class="card-link">Another link</a>
+        </div>
+    </div>
+    <div class="card" style="width: 25rem;">
+        <img src="~/images/@ViewBag.LocationPicture" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Event Location</h5>
+            <p class="card-text">@ViewBag.LocationDescription</p>
+            <a asp-action="LocationDetails" asp-route-id="@Model.LocationId" class="btn btn-primary">Location Details</a>
+        </div>
+    </div>
+    <div class="card" style="width: 25rem;">
+        <img src="~/images/@ViewBag.HostPicture" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Host Athlete</h5>
+            <p class="card-text">@ViewBag.HostAthleteName</p>
+            <a asp-action="Details" asp-route-id="@Model.HostAthleteId" class="btn btn-primary">Host Athlete Details</a>
+        </div>
+    </div>
+    <a asp-action="Index">Back to List</a>
+</div>
+    
