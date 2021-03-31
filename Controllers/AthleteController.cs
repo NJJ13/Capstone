@@ -256,7 +256,36 @@ namespace FreshAir.Controllers
                 var attendedEvent = _context.Events.Find(item.EventId);
                 currentAttendingEvents.Add(attendedEvent);
             }
-            return View(currentAttendingEvents);
+            var events = RemoveExpiredEvents(currentAttendingEvents);
+            return View(events);
+        }
+        
+        public async Task<IActionResult> SuggestedEvents()
+        {
+            var athlete = GetCurrentUser();
+            var events = _context.Events.Where(e => e.HostAthleteId != athlete.AthleteId).ToList();
+            var eventsAttended = _context.AthleteEvents.Where(ae => ae.AthleteId == athlete.AthleteId).ToList();
+            foreach (var item in eventsAttended)
+            {
+                var eventToRemove = _context.Events.Find(item.EventId);
+                events.Remove(eventToRemove);
+
+            }
+            events = RemoveExpiredEvents(events);
+            List<Event> suggestedEvents = new List<Event>();
+            foreach (var differentEvent in events)
+            {
+                var distanceAway = await _distanceMatrixService.GetDistanceEvent(athlete, differentEvent);
+                if (distanceAway < athlete.DistanceModifier)
+                {
+                    if (differentEvent.Activity == athlete.FirstInterest || differentEvent.Activity == athlete.SecondInterest || differentEvent.Activity == athlete.ThirdInterest)
+                    {
+                        suggestedEvents.Add(differentEvent);
+                    }
+                }
+            }
+            return View(suggestedEvents);
+            
         }
         public async Task<IActionResult> EditEvent(int? id)
         {
@@ -372,7 +401,8 @@ namespace FreshAir.Controllers
                     nearbyEvents.Add(differentEvent);
                 }
             }
-            return View(nearbyEvents);
+            var nearbyEventsWithoutExpiredEvents = RemoveExpiredEvents(nearbyEvents);
+            return View(nearbyEventsWithoutExpiredEvents);
         }
         public IActionResult HostedEvents()
         {
@@ -540,6 +570,18 @@ namespace FreshAir.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
             return athlete;
+        }
+
+        public List<Event> RemoveExpiredEvents(List<Event> events)
+        {
+            foreach (var item in events)
+            {
+                if (item.ScheduledTIme.Value.CompareTo(DateTime.Now) < 0)
+                {
+                    events.Remove(item);
+                }
+            }
+            return events;
         }
     }
 }
