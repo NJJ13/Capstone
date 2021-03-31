@@ -30,8 +30,7 @@
                 @item.Description
             </p>
             <p class="card-text">
-                <a asp-action="Edit" asp-route-id="@item.LocationId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.LocationId">Details</a> |
+                <a asp-action="LocationDetails" asp-route-id="@item.LocationId">Details</a> |
                 <a asp-action="CreateEvent" asp-route-id="@item.LocationId">Create New Event Here</a>
             </p>
         </div>

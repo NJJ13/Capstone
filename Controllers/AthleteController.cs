@@ -139,7 +139,7 @@ namespace FreshAir.Controllers
             return View(athlete);
         }
 
-        public IActionResult CreateEvent(int? id)
+        public IActionResult CreateEvent(int id)
         {
             var location = _context.Locations.Find(id);
             ViewBag.LocationPicture = location.Picture;
@@ -148,7 +148,7 @@ namespace FreshAir.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateEvent(int? id, Event newEvent)
+        public async Task<IActionResult> CreateEvent(int id, Event newEvent)
         {
             if (ModelState.IsValid)
             {
@@ -189,6 +189,33 @@ namespace FreshAir.Controllers
             ViewBag.LocationPicture = location.Picture;
             ViewBag.LocationDescription = location.Description;
             return View(theEvent);
+        }
+        public async Task<IActionResult> AttendEvent(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var attendingAthlete = GetCurrentUser();
+            var eventToAttend = _context.Events.Find(id);
+            if(eventToAttend == null)
+            {
+                return NotFound();
+            }
+            var athleteEvent = new AthleteEvent
+            {
+                Athlete = attendingAthlete,
+                AthleteId = attendingAthlete.AthleteId,
+                Event = eventToAttend,
+                EventId = eventToAttend.EventId
+            };
+            attendingAthlete.Events.Add(athleteEvent);
+            eventToAttend.Attendees.Add(athleteEvent);
+            _context.Update(attendingAthlete);
+            _context.Update(eventToAttend);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
         public async Task<IActionResult> EditEvent(int? id)
         {
@@ -246,7 +273,7 @@ namespace FreshAir.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("HostedEvents");
             }
             return View(Event);
         }
@@ -270,10 +297,25 @@ namespace FreshAir.Controllers
             }
             return View(nearbyLocations);
         }
+        public IActionResult LocationDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var location = _context.Locations.Find(id);
+            if (location == null)
+            {
+                return NotFound();
+            }
+
+            return View(location);
+        }
         public async Task<IActionResult> ViewNearEvents()
         {
             var athlete = GetCurrentUser();
-            var events = _context.Events.Where(e => e.EventId != 0);
+            var events = _context.Events.Where(e => e.HostAthleteId != athlete.AthleteId).ToList();
             List<Event> nearbyEvents = new List<Event>();
             foreach (var differentEvent in events)
             {
