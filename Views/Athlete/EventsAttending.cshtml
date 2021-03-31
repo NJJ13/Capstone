@@ -1,12 +1,16 @@
 ﻿@model IEnumerable<FreshAir.Models.Event>
 
 @{
-    ViewData["Title"] = "ViewNearEvents";
+    ViewData["Title"] = "Events Attending";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Events Happening Near you</h1>
+<h1>Events You Are Attending</h1>
 
+
+<p>
+    <a asp-action="HostedEvents">Events You're Hosting</a>
+</p>
 
 @foreach (var item in Model)
 {
@@ -17,7 +21,7 @@
         <div class="card-body">
             <h3 class="card-title">@item.ScheduledTIme</h3>
             <p class="card-text">@item.Description</p>
-            <a asp-action="EventDetails" asp-route-id="@item.EventId" class="btn btn-primary">Event Info</a>
+            <a asp-action="AttendedEventDetails" asp-route-id="@item.EventId" class="btn btn-primary">Event Info</a>
         </div>
     </div>
 }

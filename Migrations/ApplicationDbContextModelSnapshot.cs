@@ -87,7 +87,7 @@ namespace FreshAir.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("AthleteEvent");
+                    b.ToTable("AthleteEvents");
                 });
 
             modelBuilder.Entity("FreshAir.Models.Event", b =>
@@ -227,8 +227,8 @@ namespace FreshAir.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0ce5a87e-26ed-4385-a9b8-f0b2c5396bf7",
-                            ConcurrencyStamp = "03dd8b0c-110d-4c38-9c9d-cd3adb1603fe",
+                            Id = "ea8f1049-9d30-400c-8079-cbfba1cf97ef",
+                            ConcurrencyStamp = "080da822-3f29-43e8-b078-8f5d8c2d3449",
                             Name = "Athlete",
                             NormalizedName = "ATHLETE"
                         });
@@ -413,13 +413,13 @@ namespace FreshAir.Migrations
             modelBuilder.Entity("FreshAir.Models.AthleteEvent", b =>
                 {
                     b.HasOne("FreshAir.Models.Athlete", "Athlete")
-                        .WithMany("Events")
+                        .WithMany()
                         .HasForeignKey("AthleteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FreshAir.Models.Event", "Event")
-                        .WithMany("Attendees")
+                        .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

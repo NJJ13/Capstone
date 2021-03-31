@@ -9,10 +9,10 @@ namespace FreshAir.Models
     public class AthleteEvent
     {
         //[ForeignKey ("Athlete")]
-        public int? AthleteId { get; set; }
+        public int AthleteId { get; set; }
         public Athlete Athlete { get; set; }
         //[ForeignKey("Event")]
-        public int? EventId { get; set; }
+        public int EventId { get; set; }
         public Event Event { get; set; }
     }
 }

@@ -9,6 +9,7 @@ namespace FreshAir.Models
 {
     public class Event
     {
+        [Key]
         public int EventId { get; set; }
         public string Activity { get; set; }
         public string Description { get; set; }
@@ -18,9 +19,9 @@ namespace FreshAir.Models
         [DataType(DataType.Date)]
         public DateTime? ScheduledTIme { get; set; }
         public string Accessibility { get; set; }
+        public string LocationsName { get; set; }
         public double? LocationsLatitude { get; set; }
         public double? LocationsLongitude { get; set; }
-        public ICollection<AthleteEvent> Attendees { get; set; }
         public int AttendanceCount { get; set; }
 
         [ForeignKey("AthleteId")]

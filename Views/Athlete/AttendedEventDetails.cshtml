@@ -1,16 +1,16 @@
 ﻿@model FreshAir.Models.Event
 
 @{
-    ViewData["Title"] = "Event Details";
+    ViewData["Title"] = "Attended Event Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Event Details</h1>
+<h1>Attended Event Details</h1>
 
 <div>
     <div class="card" style="width: 25rem;">
         <div class="card-body">
-            <h5 class="card-title">@Model.Activity  - @Model.LocationsName</h5>
+            <h5 class="card-title">@Model.Activity - @Model.LocationsName</h5>
             <h6 class="card-subtitle mb-2 text-muted">Scheduled Time: @Model.ScheduledTIme</h6>
             <p class="card-text">
                 <div>Event Info: @Model.Description</div>
@@ -23,7 +23,7 @@
 
                 <div>Accessibliity: @Model.AthleticAbility</div>
             </p>
-            <a asp-action="AttendEvent" asp-route-id="@Model.EventId" class="btn btn-primary">Attend Event</></a>
+            <a asp-action="LeaveEvent" asp-route-id="@Model.EventId" class="btn btn-primary">Leave Event</></a>
         </div>
     </div>
     <div class="card" style="width: 25rem;">
@@ -44,4 +44,3 @@
     </div>
     <a asp-action="Index">Back to List</a>
 </div>
-    

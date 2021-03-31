@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FreshAir.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210329151849_1")]
+    [Migration("20210331152731_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,17 +79,17 @@ namespace FreshAir.Migrations
 
             modelBuilder.Entity("FreshAir.Models.AthleteEvent", b =>
                 {
-                    b.Property<int>("AthleteId")
+                    b.Property<int?>("AthleteId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EventId")
+                    b.Property<int?>("EventId")
                         .HasColumnType("int");
 
                     b.HasKey("AthleteId", "EventId");
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("AthleteEvent");
+                    b.ToTable("AthleteEvents");
                 });
 
             modelBuilder.Entity("FreshAir.Models.Event", b =>
@@ -139,6 +139,29 @@ namespace FreshAir.Migrations
                     b.HasIndex("LocationId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("FreshAir.Models.FriendsList", b =>
+                {
+                    b.Property<int>("CurrentUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FriendId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CurrentAthleteAthleteId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FriendAthleteAthleteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CurrentUserId", "FriendId");
+
+                    b.HasIndex("CurrentAthleteAthleteId");
+
+                    b.HasIndex("FriendAthleteAthleteId");
+
+                    b.ToTable("FriendsLists");
                 });
 
             modelBuilder.Entity("FreshAir.Models.Location", b =>
@@ -206,8 +229,8 @@ namespace FreshAir.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "816c7c0c-856b-4e01-a611-ea11685e4d6a",
-                            ConcurrencyStamp = "da4c5551-4b15-4b1b-bf4f-cf63d5869c71",
+                            Id = "ea8f1049-9d30-400c-8079-cbfba1cf97ef",
+                            ConcurrencyStamp = "080da822-3f29-43e8-b078-8f5d8c2d3449",
                             Name = "Athlete",
                             NormalizedName = "ATHLETE"
                         });
@@ -392,13 +415,13 @@ namespace FreshAir.Migrations
             modelBuilder.Entity("FreshAir.Models.AthleteEvent", b =>
                 {
                     b.HasOne("FreshAir.Models.Athlete", "Athlete")
-                        .WithMany("Events")
+                        .WithMany()
                         .HasForeignKey("AthleteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FreshAir.Models.Event", "Event")
-                        .WithMany("Attendees")
+                        .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -417,6 +440,17 @@ namespace FreshAir.Migrations
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FreshAir.Models.FriendsList", b =>
+                {
+                    b.HasOne("FreshAir.Models.Athlete", "CurrentAthlete")
+                        .WithMany()
+                        .HasForeignKey("CurrentAthleteAthleteId");
+
+                    b.HasOne("FreshAir.Models.Athlete", "FriendAthlete")
+                        .WithMany()
+                        .HasForeignKey("FriendAthleteAthleteId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

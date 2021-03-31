@@ -107,37 +107,37 @@ namespace FreshAir.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Athlete/Create
-        public IActionResult Create()
-        {
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
-        }
+        //// GET: Athlete/Create
+        //public IActionResult Create()
+        //{
+        //    ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
+        //    return View();
+        //}
 
-        // POST: Athlete/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Athlete athlete)
-        {
-            if (ModelState.IsValid)
-            {
-                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                athlete.IdentityUserId = userId;
+        //// POST: Athlete/Create
+        //// To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        //// more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(Athlete athlete)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //        athlete.IdentityUserId = userId;
 
-                var athleteWithLatandLong = await _geocodingServiceAthlete.GetGeocoding(athlete);
-                athleteWithLatandLong.DistanceModifier = 20;
+        //        var athleteWithLatandLong = await _geocodingServiceAthlete.GetGeocoding(athlete);
+        //        athleteWithLatandLong.DistanceModifier = 20;
 
-                athleteWithLatandLong.ProfilePicture = "anon.png";
+        //        athleteWithLatandLong.ProfilePicture = "anon.png";
                 
-                _context.Add(athleteWithLatandLong);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", athlete.IdentityUserId);
-            return View(athlete);
-        }
+        //        _context.Add(athleteWithLatandLong);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", athlete.IdentityUserId);
+        //    return View(athlete);
+        //}
 
         public IActionResult CreateEvent(int id)
         {
@@ -157,13 +157,14 @@ namespace FreshAir.Controllers
                 newEvent.LocationsLongitude = location.LocationLongitude;
                 newEvent.Location = location;
                 newEvent.LocationId = location.LocationId;
-                var applicationDbContext = _context.Athletes.Include(a => a.IdentityUser);
-                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var athlete = _context.Athletes.Where(o => o.IdentityUserId == userId).FirstOrDefault();
+                newEvent.LocationsName = location.LocationName;
+                var athlete = GetCurrentUser();
                 newEvent.HostAthlete = athlete;
                 newEvent.HostAthleteId = athlete.AthleteId;
+                newEvent.AttendanceCount = 1;
 
                 _context.Events.Add(newEvent);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -171,6 +172,26 @@ namespace FreshAir.Controllers
         }
 
         public IActionResult EventDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var theEvent = _context.Events.Find(id);
+            if (theEvent == null)
+            {
+                return NotFound();
+            }
+            var hostAthlete = _context.Athletes.Find(theEvent.HostAthleteId);
+            var location = _context.Locations.Find(theEvent.LocationId);
+            ViewBag.HostPicture = hostAthlete.ProfilePicture;
+            ViewBag.HostAthleteName = (hostAthlete.FirstName + " " + hostAthlete.LastName);
+            ViewBag.LocationPicture = location.Picture;
+            ViewBag.LocationDescription = location.Description;
+            return View(theEvent);
+        }
+        public IActionResult AttendedEventDetails(int? id)
         {
             if (id == null)
             {
@@ -198,6 +219,7 @@ namespace FreshAir.Controllers
             }
             var attendingAthlete = GetCurrentUser();
             var eventToAttend = _context.Events.Find(id);
+            eventToAttend.AttendanceCount += 1;
             if(eventToAttend == null)
             {
                 return NotFound();
@@ -209,13 +231,44 @@ namespace FreshAir.Controllers
                 Event = eventToAttend,
                 EventId = eventToAttend.EventId
             };
-            attendingAthlete.Events.Add(athleteEvent);
-            eventToAttend.Attendees.Add(athleteEvent);
-            _context.Update(attendingAthlete);
-            _context.Update(eventToAttend);
+            _context.Events.Update(eventToAttend);
+            _context.AthleteEvents.Add(athleteEvent);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("EventsAttending");
+        }
+        public async Task<IActionResult> LeaveEvent(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var athlete = GetCurrentUser();
+            var eventToLeave = _context.Events.Find(id);
+            eventToLeave.AttendanceCount -= 1;
+            if (eventToLeave == null)
+            {
+                return NotFound();
+            }
+            var removeAthleteEvent = _context.AthleteEvents.Find(athlete.AthleteId, eventToLeave.EventId);
+            _context.Events.Update(eventToLeave);
+            _context.AthleteEvents.Remove(removeAthleteEvent);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("EventsAttending");
+        }
+
+        public IActionResult EventsAttending()
+        {
+            var athlete = GetCurrentUser();
+            var athletesEvents = _context.AthleteEvents.Where(ae => ae.AthleteId == athlete.AthleteId).ToList();
+            List<Event> currentAttendingEvents = new List<Event>();
+            foreach (var item in athletesEvents)
+            {
+                var attendedEvent = _context.Events.Find(item.EventId);
+                currentAttendingEvents.Add(attendedEvent);
+            }
+            return View(currentAttendingEvents);
         }
         public async Task<IActionResult> EditEvent(int? id)
         {

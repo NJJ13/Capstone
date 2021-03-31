@@ -27,7 +27,6 @@ namespace FreshAir.Models
         public double? DistanceModifier { get; set; }
         public double? AthleteLatitude { get; set; }
         public double? AthleteLongitude { get; set; }
-        public ICollection<AthleteEvent> Events { get; set; }
 
 
         [ForeignKey("IdentityUser")]

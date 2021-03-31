@@ -240,7 +240,33 @@ namespace FreshAir.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AthleteEvent",
+                name: "FriendsLists",
+                columns: table => new
+                {
+                    CurrentUserId = table.Column<int>(nullable: false),
+                    FriendId = table.Column<int>(nullable: false),
+                    CurrentAthleteAthleteId = table.Column<int>(nullable: true),
+                    FriendAthleteAthleteId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FriendsLists", x => new { x.CurrentUserId, x.FriendId });
+                    table.ForeignKey(
+                        name: "FK_FriendsLists_Athletes_CurrentAthleteAthleteId",
+                        column: x => x.CurrentAthleteAthleteId,
+                        principalTable: "Athletes",
+                        principalColumn: "AthleteId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FriendsLists_Athletes_FriendAthleteAthleteId",
+                        column: x => x.FriendAthleteAthleteId,
+                        principalTable: "Athletes",
+                        principalColumn: "AthleteId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AthleteEvents",
                 columns: table => new
                 {
                     AthleteId = table.Column<int>(nullable: false),
@@ -248,15 +274,15 @@ namespace FreshAir.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AthleteEvent", x => new { x.AthleteId, x.EventId });
+                    table.PrimaryKey("PK_AthleteEvents", x => new { x.AthleteId, x.EventId });
                     table.ForeignKey(
-                        name: "FK_AthleteEvent_Athletes_AthleteId",
+                        name: "FK_AthleteEvents_Athletes_AthleteId",
                         column: x => x.AthleteId,
                         principalTable: "Athletes",
                         principalColumn: "AthleteId",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_AthleteEvent_Events_EventId",
+                        name: "FK_AthleteEvents_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "EventId",
@@ -266,7 +292,7 @@ namespace FreshAir.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "816c7c0c-856b-4e01-a611-ea11685e4d6a", "da4c5551-4b15-4b1b-bf4f-cf63d5869c71", "Athlete", "ATHLETE" });
+                values: new object[] { "ea8f1049-9d30-400c-8079-cbfba1cf97ef", "080da822-3f29-43e8-b078-8f5d8c2d3449", "Athlete", "ATHLETE" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -308,8 +334,8 @@ namespace FreshAir.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AthleteEvent_EventId",
-                table: "AthleteEvent",
+                name: "IX_AthleteEvents_EventId",
+                table: "AthleteEvents",
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
@@ -326,6 +352,16 @@ namespace FreshAir.Migrations
                 name: "IX_Events_LocationId",
                 table: "Events",
                 column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FriendsLists_CurrentAthleteAthleteId",
+                table: "FriendsLists",
+                column: "CurrentAthleteAthleteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FriendsLists_FriendAthleteAthleteId",
+                table: "FriendsLists",
+                column: "FriendAthleteAthleteId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -346,7 +382,10 @@ namespace FreshAir.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "AthleteEvent");
+                name: "AthleteEvents");
+
+            migrationBuilder.DropTable(
+                name: "FriendsLists");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
