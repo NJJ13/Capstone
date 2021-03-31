@@ -59,6 +59,7 @@ namespace FreshAir.Controllers
             string stringFileName = ProcessLocationFile(locationVM);
             var location = new Location
             {
+                LocationName = locationVM.LocationName,
                 Address = locationVM.Address,
                 City = locationVM.City,
                 State = locationVM.State,

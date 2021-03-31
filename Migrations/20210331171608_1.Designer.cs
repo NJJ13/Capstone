@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FreshAir.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210331152731_1")]
+    [Migration("20210331171608_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,10 +79,10 @@ namespace FreshAir.Migrations
 
             modelBuilder.Entity("FreshAir.Models.AthleteEvent", b =>
                 {
-                    b.Property<int?>("AthleteId")
+                    b.Property<int>("AthleteId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EventId")
+                    b.Property<int>("EventId")
                         .HasColumnType("int");
 
                     b.HasKey("AthleteId", "EventId");
@@ -125,6 +125,9 @@ namespace FreshAir.Migrations
 
                     b.Property<double?>("LocationsLongitude")
                         .HasColumnType("float");
+
+                    b.Property<string>("LocationsName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ScheduledTIme")
                         .HasColumnType("datetime2");
@@ -186,6 +189,9 @@ namespace FreshAir.Migrations
                     b.Property<double?>("LocationLongitude")
                         .HasColumnType("float");
 
+                    b.Property<string>("LocationName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Picture")
                         .HasColumnType("nvarchar(max)");
 
@@ -229,8 +235,8 @@ namespace FreshAir.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ea8f1049-9d30-400c-8079-cbfba1cf97ef",
-                            ConcurrencyStamp = "080da822-3f29-43e8-b078-8f5d8c2d3449",
+                            Id = "c15510a6-0ee8-4dc5-867e-2f2702516ed4",
+                            ConcurrencyStamp = "31ba488f-aa4e-44b9-ac38-479557400523",
                             Name = "Athlete",
                             NormalizedName = "ATHLETE"
                         });

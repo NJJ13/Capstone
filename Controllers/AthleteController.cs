@@ -107,38 +107,6 @@ namespace FreshAir.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //// GET: Athlete/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
-        //    return View();
-        //}
-
-        //// POST: Athlete/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        //// more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(Athlete athlete)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //        athlete.IdentityUserId = userId;
-
-        //        var athleteWithLatandLong = await _geocodingServiceAthlete.GetGeocoding(athlete);
-        //        athleteWithLatandLong.DistanceModifier = 20;
-
-        //        athleteWithLatandLong.ProfilePicture = "anon.png";
-                
-        //        _context.Add(athleteWithLatandLong);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", athlete.IdentityUserId);
-        //    return View(athlete);
-        //}
-
         public IActionResult CreateEvent(int id)
         {
             var location = _context.Locations.Find(id);
@@ -192,6 +160,26 @@ namespace FreshAir.Controllers
             return View(theEvent);
         }
         public IActionResult AttendedEventDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var theEvent = _context.Events.Find(id);
+            if (theEvent == null)
+            {
+                return NotFound();
+            }
+            var hostAthlete = _context.Athletes.Find(theEvent.HostAthleteId);
+            var location = _context.Locations.Find(theEvent.LocationId);
+            ViewBag.HostPicture = hostAthlete.ProfilePicture;
+            ViewBag.HostAthleteName = (hostAthlete.FirstName + " " + hostAthlete.LastName);
+            ViewBag.LocationPicture = location.Picture;
+            ViewBag.LocationDescription = location.Description;
+            return View(theEvent);
+        }
+        public IActionResult MyEventDetails(int? id)
         {
             if (id == null)
             {
@@ -369,6 +357,12 @@ namespace FreshAir.Controllers
         {
             var athlete = GetCurrentUser();
             var events = _context.Events.Where(e => e.HostAthleteId != athlete.AthleteId).ToList();
+            var eventsAttended = _context.AthleteEvents.Where(ae => ae.AthleteId == athlete.AthleteId).ToList();
+            foreach (var item in eventsAttended)
+            {
+                var eventToRemove = _context.Events.Find(item.EventId);
+                events.Remove(eventToRemove);
+            }
             List<Event> nearbyEvents = new List<Event>();
             foreach (var differentEvent in events)
             {

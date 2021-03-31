@@ -52,6 +52,7 @@ namespace FreshAir.Migrations
                 {
                     LocationId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    LocationName = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
                     City = table.Column<string>(nullable: true),
                     State = table.Column<string>(nullable: true),
@@ -216,6 +217,7 @@ namespace FreshAir.Migrations
                     SkillLevel = table.Column<string>(nullable: true),
                     ScheduledTIme = table.Column<DateTime>(nullable: true),
                     Accessibility = table.Column<string>(nullable: true),
+                    LocationsName = table.Column<string>(nullable: true),
                     LocationsLatitude = table.Column<double>(nullable: true),
                     LocationsLongitude = table.Column<double>(nullable: true),
                     AttendanceCount = table.Column<int>(nullable: false),
@@ -230,13 +232,13 @@ namespace FreshAir.Migrations
                         column: x => x.HostAthleteId,
                         principalTable: "Athletes",
                         principalColumn: "AthleteId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Events_Locations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Locations",
                         principalColumn: "LocationId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -280,19 +282,19 @@ namespace FreshAir.Migrations
                         column: x => x.AthleteId,
                         principalTable: "Athletes",
                         principalColumn: "AthleteId",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AthleteEvents_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "EventId",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "ea8f1049-9d30-400c-8079-cbfba1cf97ef", "080da822-3f29-43e8-b078-8f5d8c2d3449", "Athlete", "ATHLETE" });
+                values: new object[] { "c15510a6-0ee8-4dc5-867e-2f2702516ed4", "31ba488f-aa4e-44b9-ac38-479557400523", "Athlete", "ATHLETE" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

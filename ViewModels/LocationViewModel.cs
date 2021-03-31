@@ -9,6 +9,7 @@ namespace FreshAir.ViewModels
 {
     public class LocationViewModel
     {
+        public string LocationName { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }

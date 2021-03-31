@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<FreshAir.Models.Location>
 
 @{
-    ViewData["Title"] = "ViewNearLocations";
+    ViewData["Title"] = "View Near Locations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,30 +12,31 @@
 </p>
 @foreach (var item in Model)
 {
-    <div class="card" style="width: 18rem;">
-        <img src="~/images/@item.Picture" class="card-img-top" alt="...">
-        <div class="card-body">
-            <p class="card-text">
-                <div>
-                    @item.LocationName
-                </div>
-                <div>
-                    @item.Address
-                </div>
-                <div>
-                    @item.City,
-                    @item.State
-                    @item.ZipCode
-                </div>
-
-            </p>
-            <p class="card-text">
-                @item.Description
-            </p>
-            <p class="card-text">
-                <a asp-action="LocationDetails" asp-route-id="@item.LocationId">Details</a> |
-                <a asp-action="CreateEvent" asp-route-id="@item.LocationId">Create New Event Here</a>
-            </p>
-        </div>
+<div class="card" style="width: 25rem;">
+    <img src="~/images/@item.Picture" class="card-img-top" alt="...">
+    <div class="card-body">
+        <p class="card-text">
+            <h5>@item.LocationName</h5> 
+        </p>
+        <p class="card-text">
+            <div>
+                @item.Address
+            </div>
+            <div>
+                @item.City,
+                @item.State
+                @item.ZipCode
+            </div>
+        </p>
+        <p class="card-text">
+            @item.Description
+        </p>
+        <p class="card-text">
+            <a asp-action="LocationsEvents" asp-route-id="@item.LocationId" class="btn btn-primary">Events at this Location</a>
+        </p>
+        <p class="card-text">
+            <a asp-action="CreateEvent" asp-route-id="@item.LocationId" class="btn btn-primary">Create New Event Here</a>
+        </p>
     </div>
+</div>
 }

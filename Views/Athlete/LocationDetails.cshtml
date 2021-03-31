@@ -1,0 +1,32 @@
+﻿@model FreshAir.Models.Location
+
+@{
+    ViewData["Title"] = "Location Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Location Details</h1>
+
+<div>
+    <h4>Location</h4>
+    <hr />
+    <div class="card" style="width: 25rem;">
+        <img src="~/images/@Model.Picture" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">@Model.LocationName</h5>
+            <p class="card-text">
+                <div>
+                    @Model.Address
+                </div>
+                <div>
+                    @Model.City @Model.State, @Model.ZipCode
+                </div>
+
+                <div>
+                    @Model.Description
+                </div>
+            </p>
+            <a asp-action="LocationsEvent" asp-route-id="@Model.LocationId" class="btn btn-primary">Events At This Location</a>
+        </div>
+    </div>
+</div>
