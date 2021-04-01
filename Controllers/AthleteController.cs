@@ -411,7 +411,8 @@ namespace FreshAir.Controllers
         public IActionResult HostedEvents()
         {
             var athlete = GetCurrentUser();
-            var hostedEvents = _context.Events.Where(e => e.HostAthleteId == athlete.AthleteId);
+            var hostedEvents = _context.Events.Where(e => e.HostAthleteId == athlete.AthleteId).ToList();
+            var activeHostedEvents = RemoveExpiredEvents(hostedEvents);
             return View(hostedEvents);
         }
 
@@ -518,33 +519,38 @@ namespace FreshAir.Controllers
         }
 
         // GET: Athlete/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> RemoveEvent(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var athlete = await _context.Athletes
-                .Include(a => a.IdentityUser)
-                .FirstOrDefaultAsync(m => m.AthleteId == id);
-            if (athlete == null)
+            var eventToRemove = await _context.Events.FindAsync(id);
+                
+            if (eventToRemove == null)
             {
                 return NotFound();
             }
 
-            return View(athlete);
+            return View(eventToRemove);
         }
 
         // POST: Athlete/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("RemoveEvent")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> RemoveConfirmed(int id)
         {
-            var athlete = await _context.Athletes.FindAsync(id);
-            _context.Athletes.Remove(athlete);
+            var eventToRemove = await _context.Events.FindAsync(id);
+            _context.Events.Remove(eventToRemove);
+            var updateAthleteEvents = _context.AthleteEvents.Where(ae => ae.EventId == eventToRemove.EventId).ToList();
+            foreach (var item in updateAthleteEvents)
+            {
+                _context.AthleteEvents.Remove(item);
+            }
+
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
 
         private bool AthleteExists(int id)
