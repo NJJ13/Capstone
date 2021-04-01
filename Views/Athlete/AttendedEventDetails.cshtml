@@ -28,9 +28,13 @@
             </div>
 
             <div>
+                <a asp-action="ChatWithAttendees" asp-route-id="@Model.EventId" class="btn btn-primary">Chat With Attendees</></a>
+            </div>
+
+            <div>
                 <a asp-action="LeaveEvent" asp-route-id="@Model.EventId" class="btn btn-primary">Leave Event</></a>
             </div>
-            
+
         </div>
     </div>
     <div class="card" style="width: 25rem;">

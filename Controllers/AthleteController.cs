@@ -47,15 +47,18 @@ namespace FreshAir.Controllers
             return View(view);
         }
 
-        public IActionResult ChatWithAttendees()
+        public IActionResult ChatWithAttendees(int? id)
         {
-            var athlete = GetCurrentUser();
-            if (athlete == null)
+            var attendeesList = _context.AthleteEvents.Where(ae => ae.EventId == id).ToList();
+            var attendees = new List<Athlete>();
+            foreach (var item in attendeesList)
             {
-                return RedirectToAction("CreateVM");
+                attendees.Add(_context.Athletes.Find(item.AthleteId));
             }
-            var view = _context.Athletes.Where(a => a.AthleteId == athlete.AthleteId).ToList();
-            return View();
+            var athlete = GetCurrentUser();
+            attendees.Add(athlete);
+            ViewBag.UserName = athlete.FirstName + " " + athlete.LastName;
+            return View(attendees);
         }
         // GET: Athlete/Details/5
         public IActionResult MyDetails()
