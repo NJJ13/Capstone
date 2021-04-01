@@ -203,6 +203,26 @@ namespace FreshAir.Controllers
             ViewBag.LocationDescription = location.Description;
             return View(theEvent);
         }
+        public IActionResult MyExpiredEventDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var expiredEvent = _context.Events.Find(id);
+            if (expiredEvent == null)
+            {
+                return NotFound();
+            }
+            var hostAthlete = _context.Athletes.Find(expiredEvent.HostAthleteId);
+            var location = _context.Locations.Find(expiredEvent.LocationId);
+            ViewBag.HostPicture = hostAthlete.ProfilePicture;
+            ViewBag.HostAthleteName = (hostAthlete.FirstName + " " + hostAthlete.LastName);
+            ViewBag.LocationPicture = location.Picture;
+            ViewBag.LocationDescription = location.Description;
+            return View(expiredEvent);
+        }
         public async Task<IActionResult> AttendEvent(int? id)
         {
             if (id == null)
@@ -386,6 +406,20 @@ namespace FreshAir.Controllers
 
             return View(location);
         }
+        public IActionResult LocationsEvents(int? id)
+        {
+            var athlete = GetCurrentUser();
+            var eventsAtLocation = _context.Events.Where(e => e.LocationId == id).ToList();
+            var eventsAttended = _context.AthleteEvents.Where(ae => ae.AthleteId == athlete.AthleteId).ToList();
+            foreach (var item in eventsAttended)
+            {
+                var eventToRemove = _context.Events.Find(item.EventId);
+                eventsAtLocation.Remove(eventToRemove);
+            }
+            var locationEvents = RemoveExpiredEvents(eventsAtLocation);
+
+            return View(locationEvents);
+        }
         public async Task<IActionResult> ViewNearEvents()
         {
             var athlete = GetCurrentUser();
@@ -413,7 +447,14 @@ namespace FreshAir.Controllers
             var athlete = GetCurrentUser();
             var hostedEvents = _context.Events.Where(e => e.HostAthleteId == athlete.AthleteId).ToList();
             var activeHostedEvents = RemoveExpiredEvents(hostedEvents);
-            return View(hostedEvents);
+            return View(activeHostedEvents);
+        }
+        public IActionResult PastHostedEvents()
+        {
+            var athlete = GetCurrentUser();
+            var hostedEvents = _context.Events.Where(e => e.HostAthleteId == athlete.AthleteId).ToList();
+            var pastHostedEvents = RemoveActiveEvents(hostedEvents);
+            return View(pastHostedEvents);
         }
 
         public async Task<IActionResult> EditProfilePicture(int? id)
@@ -587,6 +628,12 @@ namespace FreshAir.Controllers
             var eventsWithoutExpired = events.Where(e => e.ScheduledTIme.Value.CompareTo(DateTime.Now) >= 0).ToList();
             
             return eventsWithoutExpired;
+        }
+        public List<Event> RemoveActiveEvents(List<Event> events)
+        {
+            var expiredEvents = events.Where(e => e.ScheduledTIme.Value.CompareTo(DateTime.Now) < 0).ToList();
+
+            return expiredEvents;
         }
     }
 }

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Fresh Air</h1>
+<h1>Fresh Air - Home</h1>
 
 <p>
     <a asp-action="ViewNearLocations">View Locations in Your Area</a>
@@ -19,7 +19,7 @@
 
 @foreach (var item in Model)
 { 
-<div class="card" style="width: 18rem;">
+<div class="card" style="width: 25rem;">
   <img src = "~/images/@item.ProfilePicture" class="card-img-top" alt="ProfilePicture">
   <div class="card-body">
       <p class="card-text">

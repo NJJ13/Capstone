@@ -1,11 +1,11 @@
 ﻿@model FreshAir.Models.Event
 
 @{
-    ViewData["Title"] = "My Event Details";
+    ViewData["Title"] = "My Expired Event Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>My Event Details</h1>
+<h1>Expired Event Details</h1>
 
 <div>
     <div class="card" style="width: 25rem;">
@@ -23,7 +23,6 @@
 
                 <div>Accessibliity: @Model.AthleticAbility</div>
             </p>
-            <a asp-action="RemoveEvent" asp-route-id="@Model.EventId" class="btn btn-primary">Remove Event</></a>
         </div>
     </div>
     <div class="card" style="width: 25rem;">
@@ -44,3 +43,4 @@
     </div>
     <a asp-action="Index">Back to List</a>
 </div>
+
