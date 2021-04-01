@@ -284,6 +284,16 @@ namespace FreshAir.Controllers
             return View(events);
         }
         
+        public IActionResult AthletesAttending(int? id)
+        {
+            var athletesAttendingId = _context.AthleteEvents.Where(ae => ae.EventId == id).ToList();
+            List<Athlete> attendingAthletes = new List<Athlete>();
+            foreach (var item in athletesAttendingId)
+            {
+                attendingAthletes.Add(_context.Athletes.Find(item.AthleteId));
+            }
+            return View(attendingAthletes);
+        }
         public async Task<IActionResult> SuggestedEvents()
         {
             var athlete = GetCurrentUser();

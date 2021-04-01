@@ -1,0 +1,30 @@
+﻿@model IEnumerable<FreshAir.Models.Athlete>
+
+@{
+    ViewData["Title"] = "Athletes Attending";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Athletes Attending Event</h1>
+
+@foreach (var item in Model)
+{
+    <div class="card" style="width: 25rem;">
+        <img src="~/images/@item.ProfilePicture" class="card-img-top" alt="ProfilePicture">
+        <div class="card-body">
+            <p class="card-text">
+                <div>
+                    <h4>
+                        @item.FirstName @item.LastName
+                    </h4>
+                </div>
+                <div>
+                    <a asp-action="Details" asp-route-id="@item.AthleteId">View Info</a>
+                </div>
+                <div>
+                    <a asp-action="Follow" asp-route-id="@item.AthleteId">Follow This Athlete</a>
+                </div>
+            </p>
+        </div>
+    </div>
+}
