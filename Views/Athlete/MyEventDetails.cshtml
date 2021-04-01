@@ -23,7 +23,13 @@
 
                 <div>Accessibliity: @Model.AthleticAbility</div>
             </p>
-            <a asp-action="RemoveEvent" asp-route-id="@Model.EventId" class="btn btn-primary">Remove Event</></a>
+            <div>
+                <a asp-action="AthletesAttending" asp-route-id="@Model.EventId" class="btn btn-primary">Attendees</></a>
+            </div>
+
+            <div>
+                <a asp-action="RemoveEvent" asp-route-id="@Model.EventId" class="btn btn-primary">Remove Event</></a>
+            </div>
         </div>
     </div>
     <div class="card" style="width: 25rem;">
