@@ -70,7 +70,11 @@ namespace FreshAir.Controllers
             {
                 return NotFound();
             }
-
+            var currentUser = GetCurrentUser();
+            if (id == currentUser.AthleteId)
+            {
+                return RedirectToAction("MyDetails");
+            }
             return View(athlete);
         }
         public IActionResult CreateVM()
@@ -574,14 +578,9 @@ namespace FreshAir.Controllers
 
         public List<Event> RemoveExpiredEvents(List<Event> events)
         {
-            foreach (var item in events)
-            {
-                if (item.ScheduledTIme.Value.CompareTo(DateTime.Now) < 0)
-                {
-                    events.Remove(item);
-                }
-            }
-            return events;
+            var eventsWithoutExpired = events.Where(e => e.ScheduledTIme.Value.CompareTo(DateTime.Now) >= 0).ToList();
+            
+            return eventsWithoutExpired;
         }
     }
 }
