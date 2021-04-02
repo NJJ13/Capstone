@@ -10,7 +10,7 @@ namespace FreshAir.Hubs
     {
         public async Task SendMessage(string user, string message)
         {
-            string timeSent = DateTime.Now.ToShortDateString();
+            string timeSent = DateTime.Now.ToShortTimeString();
             await Clients.All.SendAsync("ReceiveMessage", user, message, timeSent);
         }
     }

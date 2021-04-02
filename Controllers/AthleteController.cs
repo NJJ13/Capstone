@@ -443,8 +443,12 @@ namespace FreshAir.Controllers
 
             return View(locationEvents);
         }
-        public async Task<IActionResult> ViewNearEvents()
+        public async Task<IActionResult> ViewNearEvents(string filterActivity, string filterAthleticAbility, string filterSkillLevel)
         {
+            ViewData["CurrentActivityFilter"] = filterActivity;
+            ViewData["CurrentAbilityFilter"] = filterAthleticAbility;
+            ViewData["CurrentSkillFilter"] = filterSkillLevel;
+
             var athlete = GetCurrentUser();
             var events = _context.Events.Where(e => e.HostAthleteId != athlete.AthleteId).ToList();
             var eventsAttended = _context.AthleteEvents.Where(ae => ae.AthleteId == athlete.AthleteId).ToList();
@@ -463,6 +467,27 @@ namespace FreshAir.Controllers
                 }
             }
             var nearbyEventsWithoutExpiredEvents = RemoveExpiredEvents(nearbyEvents);
+            if (!String.IsNullOrEmpty(filterActivity))
+            {
+                if (filterActivity != "None")
+                {
+                    nearbyEventsWithoutExpiredEvents = nearbyEventsWithoutExpiredEvents.Where(e => e.Activity == filterActivity).ToList();
+                }
+            }
+            if (!String.IsNullOrEmpty(filterAthleticAbility))
+            {
+                if (filterAthleticAbility != "None")
+                {
+                    nearbyEventsWithoutExpiredEvents = nearbyEventsWithoutExpiredEvents.Where(e => e.AthleticAbility == filterAthleticAbility).ToList();
+                }
+            }
+            if (!String.IsNullOrEmpty(filterSkillLevel))
+            {
+                if (filterSkillLevel != "None")
+                {
+                    nearbyEventsWithoutExpiredEvents = nearbyEventsWithoutExpiredEvents.Where(e => e.SkillLevel == filterSkillLevel).ToList();
+                }
+            }
             return View(nearbyEventsWithoutExpiredEvents);
         }
         public IActionResult HostedEvents()
@@ -657,6 +682,18 @@ namespace FreshAir.Controllers
             var expiredEvents = events.Where(e => e.ScheduledTIme.Value.CompareTo(DateTime.Now) < 0).ToList();
 
             return expiredEvents;
+        }
+
+        public List<Athlete> GetAttendees(Event @event)
+        {
+            var attendeesList = _context.AthleteEvents.Where(ae => ae.EventId == @event.EventId).ToList();
+            var attendees = new List<Athlete>();
+            foreach (var item in attendeesList)
+            {
+                attendees.Add(_context.Athletes.Find(item.AthleteId));
+            }
+            attendees.Add(_context.Athletes.Find(@event.HostAthleteId));
+            return attendees;
         }
     }
 }

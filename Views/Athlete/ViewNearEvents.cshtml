@@ -7,6 +7,76 @@
 
 <h1>Events Happening Near you</h1>
 
+<form asp-action="ViewNearEvents" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <select class="form-control" id="Activity" name="filterActivity" value="@ViewData["CurrentActivityFilter"]">
+                <option value="None">Select Activity</option>
+                <option value="Badminton">Badminton</option>
+                <option value="Baseball/Softball">Baseball and Softball</option>
+                <option value="Basketball">Basketball</option>
+                <option value="BMX Biking">BMX Biking</option>
+                <option value="Canoeing/Kayaking">Canoeing and Kayaking</option>
+                <option value="Climbing">Climbing</option>
+                <option value="Cricket">Cricket</option>
+                <option value="Cycling">Cycling</option>
+                <option value="Dance">Dance</option>
+                <option value="Field Hockey">Field Hockey</option>
+                <option value="Fishing">Fishing</option>
+                <option value="Football">Football</option>
+                <option value="Frisbee/Frolf">Frisbee and Frolf</option>
+                <option value="Golf">Golf</option>
+                <option value="Gymnastics">Gymnastics</option>
+                <option value="Hiking">Hiking</option>
+                <option value="Hockey">Hockey</option>
+                <option value="Ice Skating">Ice Skating</option>
+                <option value="Jogging">Jogging</option>
+                <option value="Jump Rope/Double Dutch">Jump Rope and Double Dutch</option>
+                <option value="Kite Boarding/Kitesurfing">Kite Boarding and Kitesurfing</option>
+                <option value="Lacrosse">Lacrosse</option>
+                <option value="Roller Skating/Roller Blading">Roller Skating and Roller Blading</option>
+                <option value="Rowing">Rowing</option>
+                <option value="Running">Running</option>
+                <option value="Skateboarding">Skateboarding</option>
+                <option value="Skiing">Skiing</option>
+                <option value="Soccer">Soccer</option>
+                <option value="Swimming">Swimming</option>
+                <option value="Tai Chi">Tai Chi</option>
+                <option value="Tennis">Tennis</option>
+                <option value="Trail Running">Trail Running</option>
+                <option value="Track and Field">Track and Field</option>
+                <option value="Volleyball">Volleyball</option>
+                <option value="Yoga">Yoga</option>
+                <option value="Weight Lifting">Weight Lifting</option>
+            </select>
+        </p>
+    </div>
+    <div class="form-actions no-color">
+        <p>
+            <select class="form-control" id="Skill" name="filterSkill" value="@ViewData["CurrentSkillFilter"]">
+                <option value="None">Select Skill Level</option>
+                <option value="Novice">Novice</option>
+                <option value="Advanced Beginner">Advanced Beginner</option>
+                <option value="Competant">Competant</option>
+                <option value="Proficient">Proficient</option>
+                <option value="Expert">Expert</option>
+            </select>
+        </p>
+    </div>
+    <div class="form-actions no-color">
+        <p>
+            <select class="form-control" id="AthleticAbility" name="filterAthleticAbility" value="@ViewData["CurrentAbilityFilter"]">
+                <option value="None">Select Athletic Ability</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+                <option value="Elite">Elite</option>
+            </select>
+            <input type="submit" value="Apply Filter" class="btn btn-primary" />
+        </p>
+    </div>
+
+</form>
 
 @foreach (var item in Model)
 {
@@ -22,4 +92,4 @@
     </div>
 }
 
-<a asp-action="Index">Back to Home</a>
+<a asp-action="Index" class="btn btn-primary">Back to Home</a> | <a asp-action="ViewNearEvents" class="btn btn-primary">Reset Filters</a>
