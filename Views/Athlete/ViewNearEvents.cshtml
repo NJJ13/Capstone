@@ -5,7 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Events Happening Near you</h1>
+<h1>Events Happening Near You</h1>
+
+<div class="col-md-2">
+    <div id="googleMap" style="height:400px;width:400px;"></div>
+    
+</div>
 
 <form asp-action="ViewNearEvents" method="get">
     <div class="form-actions no-color">
@@ -53,7 +58,7 @@
     </div>
     <div class="form-actions no-color">
         <p>
-            <select class="form-control" id="Skill" name="filterSkill" value="@ViewData["CurrentSkillFilter"]">
+            <select class="form-control" id="Skill" name="filterSkillLevel" value="@ViewData["CurrentSkillFilter"]">
                 <option value="None">Select Skill Level</option>
                 <option value="Novice">Novice</option>
                 <option value="Advanced Beginner">Advanced Beginner</option>
@@ -77,7 +82,10 @@
     </div>
 
 </form>
-
+<script>
+    var markersLat = [];
+    var markersLng = [];
+</script>
 @foreach (var item in Model)
 {
     <div class="card">
@@ -90,6 +98,25 @@
             <a asp-action="EventDetails" asp-route-id="@item.EventId" class="btn btn-primary">Event Info</a>
         </div>
     </div>
+    <script>
+        var lat = @item.LocationsLatitude;
+        var lng = @item.LocationsLongitude;
+        markersLat.push(lat);
+        markersLng.push(lng);
+    </script>
 }
+<script>
+        function myMap() {
+            var myCenter = new google.maps.LatLng(@ViewBag.AthleteLat, @ViewBag.AthleteLng);
+            var mapProp = { center: myCenter, zoom: 12, scrollwheel: false, draggable: true, mapTypeId: google.maps.MapTypeId.ROADMAP };
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+            for (var i = 0; i < markersLat.length; i++) {
+                marker = new google.maps.Marker({
+                position: { lat: markersLat[i], lng: markersLng[i]},
+                map: map
+                });
+            }
+        }
+</script><script async defer src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.APIKeys&callback=myMap"></script>
 
 <a asp-action="Index" class="btn btn-primary">Back to Home</a> | <a asp-action="ViewNearEvents" class="btn btn-primary">Reset Filters</a>

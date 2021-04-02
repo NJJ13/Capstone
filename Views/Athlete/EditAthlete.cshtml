@@ -228,6 +228,23 @@
                 <span asp-validation-for="AthleticAbility" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="DistanceModifier" class="control-label"></label>
+                <select class="form-control" id="DistanceModifier" name="DistanceModifier">
+                    <option value=5>Select Distance Radius</option>
+                    <option value=5>Less than 5 miles</option>
+                    <option value=10>Less than 10 miles</option>
+                    <option value=15>Less than 15 miles</option>
+                    <option value=20>Less than 20 miles</option>
+                    <option value=30>Less than 30 miles</option>
+                    <option value=40>Less than 40 miles</option>
+                    <option value=50>Less than 50 miles</option>
+                    <option value=60>Less than 60 miles</option>
+                    <option value=70>Less than 70 miles</option>
+                    <option value=80>Less than 80 miles</option>
+                </select>
+                <span asp-validation-for="DistanceModifier" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

@@ -109,11 +109,11 @@ namespace FreshAir.Controllers
                 SecondInterest = athleteVM.SecondInterest,
                 ThirdInterest = athleteVM.ThirdInterest,
                 AthleticAbility = athleteVM.AthleticAbility,
+                DistanceModifier = athleteVM.DistanceModifier,
                 ProfilePicture = stringFileName
             };
             athlete.IdentityUserId = userId;
             var athleteWithLatandLong = await _geocodingServiceAthlete.GetGeocoding(athlete);
-            athleteWithLatandLong.DistanceModifier = 5;
 
             if(athleteWithLatandLong.ProfilePicture == null)
             {
@@ -310,6 +310,9 @@ namespace FreshAir.Controllers
         public async Task<IActionResult> SuggestedEvents()
         {
             var athlete = GetCurrentUser();
+            ViewBag.AthleteLat = athlete.AthleteLatitude;
+            ViewBag.AthleteLng = athlete.AthleteLongitude;
+            ViewBag.APIKeys = APIKeys.GOOGLE_API_KEY;
             var events = _context.Events.Where(e => e.HostAthleteId != athlete.AthleteId).ToList();
             var eventsAttended = _context.AthleteEvents.Where(ae => ae.AthleteId == athlete.AthleteId).ToList();
             foreach (var item in eventsAttended)
@@ -331,6 +334,7 @@ namespace FreshAir.Controllers
                     }
                 }
             }
+
             return View(suggestedEvents);
             
         }
@@ -445,11 +449,14 @@ namespace FreshAir.Controllers
         }
         public async Task<IActionResult> ViewNearEvents(string filterActivity, string filterAthleticAbility, string filterSkillLevel)
         {
+            var athlete = GetCurrentUser();
             ViewData["CurrentActivityFilter"] = filterActivity;
             ViewData["CurrentAbilityFilter"] = filterAthleticAbility;
             ViewData["CurrentSkillFilter"] = filterSkillLevel;
+            ViewBag.AthleteLat = athlete.AthleteLatitude;
+            ViewBag.AthleteLng = athlete.AthleteLongitude;
+            ViewBag.APIKeys = APIKeys.GOOGLE_API_KEY;
 
-            var athlete = GetCurrentUser();
             var events = _context.Events.Where(e => e.HostAthleteId != athlete.AthleteId).ToList();
             var eventsAttended = _context.AthleteEvents.Where(ae => ae.AthleteId == athlete.AthleteId).ToList();
             foreach (var item in eventsAttended)
