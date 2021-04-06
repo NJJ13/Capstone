@@ -543,6 +543,13 @@ namespace FreshAir.Controllers
                 var eventToRemove = _context.Events.Find(item.EventId);
                 eventsAtLocation.Remove(eventToRemove);
             }
+            foreach (var item in eventsAtLocation)
+            {
+                if (item.HostAthleteId == athlete.AthleteId)
+                {
+                    eventsAtLocation.Remove(item);
+                }
+            }
             var locationEvents = RemoveExpiredEvents(eventsAtLocation);
 
             return View(locationEvents);
@@ -789,6 +796,17 @@ namespace FreshAir.Controllers
             var expiredEvents = events.Where(e => e.ScheduledTIme.Value.CompareTo(DateTime.Now) < 0).ToList();
 
             return expiredEvents;
+        }
+        public List<Event> RemovePrivateEvents(List<Event> events)
+        {
+            foreach (var item in events)
+            {
+                if (item.Accessibility == "Private")
+                {
+                    events.Remove(item);
+                }
+            }
+            return events;
         }
 
         public List<Athlete> GetAttendees(Event @event)

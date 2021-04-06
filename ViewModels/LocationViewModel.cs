@@ -9,10 +9,12 @@ namespace FreshAir.ViewModels
 {
     public class LocationViewModel
     {
+        [Display(Name = "Location Name")]
         public string LocationName { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+        [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
         public string Description { get; set; }
         [FileExtensions(Extensions = "jpg,jpeg,png,pdf")]

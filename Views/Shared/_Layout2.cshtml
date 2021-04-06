@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-Flatly.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
+
 <body>
+    <style>
+        body {
+            background: #F0E68C;
+        }
+    </style>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <a class="navbar-brand" asp-action="AboutFreshAir">FreshAir</a>
@@ -24,9 +30,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-action="FollowedAthletes">F</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="#">About Us</a>
                     </li>
                     <li class="nav-item dropdown">
@@ -41,8 +44,7 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" asp-action="ViewNearLocations">View Near Locations</a>
                             <a class="dropdown-item" asp-action="GoCreateNewLocation">Create New Location</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Separated link</a>
+
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -52,9 +54,12 @@
                             <a class="dropdown-item" asp-action="SuggestedEvents">Events for You</a>
                             <a class="dropdown-item" asp-action="HostedEvents">Events You're Hosting</a>
                             <a class="dropdown-item" asp-action="EventsAttending">Events You're Attending</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Separated link</a>
                         </div>
+                    </li>
+                    <li class="nav-item">
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="nav-link btn btn-link">Logout</button>
+                        </form>
                     </li>
                 </ul>
             </div>

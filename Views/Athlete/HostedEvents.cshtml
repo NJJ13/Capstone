@@ -8,10 +8,11 @@
 <h1>Events You're Hosting</h1>
 
 <p>
-    <a asp-action="EventsAttending">Events You're Attending</a>
+    <a asp-action="EventsAttending" class="btn btn-primary">Events You're Attending</a> |
+    <a asp-action="PastHostedEvents" class="btn btn-primary">Events You've Hosted</a>
 </p>
 <p>
-    <a asp-action="PastHostedEvents">Events You've Hosted</a>
+    
 </p>
 
 @foreach (var item in Model)
@@ -28,7 +29,5 @@
         </div>
     </div>
 }
-
-<a asp-action="Index">Back to Home</a>
 
 

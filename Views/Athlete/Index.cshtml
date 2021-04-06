@@ -1,21 +1,13 @@
 ﻿@model IEnumerable<FreshAir.Models.Athlete>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
-
-<h1>Fresh Air - Home</h1>
-
-<p>
-    <a asp-action="ViewNearLocations">View Locations in Your Area</a>
-</p>
-<p>
-    <a asp-action="ViewNearEvents">View Events in Your Area</a>
-</p>
-<p>
-    <a asp-action="SuggestedEvents">View Events Catered to Your Interests</a>
-</p>
+<div>
+    <h1>Welcome to Fresh Air </h1>
+    <img src="~/Additional/symbol-air-color.png" alt="Symbol" />
+</div>
 
 @foreach (var item in Model)
 { 
@@ -26,16 +18,8 @@
           <div>
               <a asp-action="MyDetails">View Your Info</a>
           </div>
-          <div>
-              <a asp-action="FriendsList" asp-route-id="@item.AthleteId">Friend's List</a>
-          </div>
-          <div>
-              <a asp-action="HostedEvents">Events You're Hosting</a>
-          </div>
-          <div>
-              <a asp-action="EventsAttending">Events You're Attending</a>
-          </div>
       </p>
   </div>
 </div>
 }
+<img src="~/Additional/air.jpg" width="800" alt="FreshAir" />
