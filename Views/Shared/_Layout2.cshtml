@@ -32,8 +32,8 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Locations</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">View Near Locations</a>
-                            <a class="dropdown-item" href="#">Create New Location</a>
+                            <a class="dropdown-item" asp-action="ViewNearLocations">View Near Locations</a>
+                            <a class="dropdown-item" asp-action="GoCreateNewLocation">Create New Location</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Separated link</a>
                         </div>
@@ -41,10 +41,10 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Events</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Events in Your Area</a>
-                            <a class="dropdown-item" href="#">Events for You</a>
-                            <a class="dropdown-item" href="#">Events You're Hosting</a>
-                            <a class="dropdown-item" href="#">Events You're Attending</a>
+                            <a class="dropdown-item" asp-action="ViewNearEvents">Events in Your Area</a>
+                            <a class="dropdown-item" asp-action="SuggestedEvents">Events for You</a>
+                            <a class="dropdown-item" asp-action="HostedEvents">Events You're Hosting</a>
+                            <a class="dropdown-item" asp-action="EventsAttending">Events You're Attending</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Separated link</a>
                         </div>

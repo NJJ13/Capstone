@@ -10,10 +10,12 @@ namespace FreshAir.Models
     {
         [Key]
         public int LocationId { get; set; }
+        [Display(Name = "Location Name")]
         public string LocationName { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+        [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
         public string Description { get; set; }
         public string Picture { get; set; }
