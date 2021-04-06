@@ -41,8 +41,5 @@
             @Html.DisplayFor(model => model.AthleticAbility)
         </dd>
     </dl>
-    <a asp-action="Follow" asp-route-id="@Model.AthleteId" class="btn btn-primary">Follow This Athlete</a>
-</div>
-<div>
-    <a asp-action="Index">Back to Home</a>
+    <a asp-action="Unfollow" asp-route-id="@Model.AthleteId" class="btn btn-primary">Unfollow This Athlete</a>
 </div>

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FreshAir.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210405172139_3")]
-    partial class _3
+    [Migration("20210406091522_1")]
+    partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,9 +52,6 @@ namespace FreshAir.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LikedAthletes")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(max)");
 
@@ -68,7 +65,8 @@ namespace FreshAir.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.HasKey("AthleteId");
 
@@ -253,8 +251,8 @@ namespace FreshAir.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "51712ea3-596e-4842-a65d-09d147d1b225",
-                            ConcurrencyStamp = "3b046971-e702-4caf-a717-db1856bcb483",
+                            Id = "6b7833fa-d8f2-46a7-adfa-265a99125ec5",
+                            ConcurrencyStamp = "684a8a19-526f-4e1b-8c9d-170bc56ce253",
                             Name = "Athlete",
                             NormalizedName = "ATHLETE"
                         });

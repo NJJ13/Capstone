@@ -111,8 +111,85 @@ namespace FreshAir.Controllers
             {
                 return RedirectToAction("MyDetails");
             }
+            var currentUserFollowers = _context.FriendsLists.Where(f => f.CurrentUserId == currentUser.AthleteId).ToList(); 
+            if (currentUserFollowers.Where(u=>u.FriendId == id).ToList().Count > 0)
+            {
+                return RedirectToAction("FriendDetails", "Athlete", id);
+            }
             return View(athlete);
         }
+        public async Task<IActionResult> FriendDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var athlete = await _context.Athletes.Include(a => a.IdentityUser).FirstOrDefaultAsync(m => m.AthleteId == id);
+            if (athlete == null)
+            {
+                return NotFound();
+            }
+            var currentUser = GetCurrentUser();
+            if (id == currentUser.AthleteId)
+            {
+                return RedirectToAction("MyDetails");
+            }
+
+            return View(athlete);
+        }
+        [HttpPatch]
+        public async Task<IActionResult> Follow(int? id)
+        {
+            var user = GetCurrentUser();
+            var athleteToFollow = _context.Athletes.Find(id);
+            var newFollowing = new FriendsList();
+
+            newFollowing.CurrentAthlete = user;
+            newFollowing.CurrentUserId = user.AthleteId;
+            newFollowing.FriendAthlete = athleteToFollow;
+            newFollowing.FriendId = athleteToFollow.AthleteId;
+
+            _context.FriendsLists.Add(newFollowing);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("FollowedAthletes");
+        }
+        [HttpPatch]
+        public async Task<IActionResult> Unfollow(int? id)
+        {
+            var user = GetCurrentUser();
+            var athleteToUnfollow = _context.Athletes.Find(id);
+            var stopFollowing = _context.FriendsLists.Find(user.AthleteId, athleteToUnfollow.AthleteId);
+            _context.FriendsLists.Remove(stopFollowing);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("FollowedAthletes");
+        }
+
+        public IActionResult FollowedAthletes()
+        {
+            var user = GetCurrentUser();
+            var athletesFollowedId = _context.FriendsLists.Where(f => f.CurrentUserId == user.AthleteId).ToList();
+            List<Athlete> athletesFollowed = new List<Athlete>();
+            foreach (var item in athletesFollowedId)
+            {
+                var athlete = _context.Athletes.Find(item.FriendId);
+                athletesFollowed.Add(athlete);
+            }
+            return View(athletesFollowed);
+        }
+        public IActionResult AthletesFollowingYou()
+        {
+            var user = GetCurrentUser();
+            var athletesFollowingYouId = _context.FriendsLists.Where(f => f.FriendId == user.AthleteId).ToList();
+            List<Athlete> athletesFollowingYou = new List<Athlete>();
+            foreach (var item in athletesFollowingYouId)
+            {
+                var athlete = _context.Athletes.Find(item.CurrentUserId);
+                athletesFollowingYou.Add(athlete);
+            }
+            return View(athletesFollowingYou);
+        }
+
         public IActionResult CreateVM()
         {
             return View();

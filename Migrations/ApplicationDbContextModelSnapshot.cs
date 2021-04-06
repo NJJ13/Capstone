@@ -50,9 +50,6 @@ namespace FreshAir.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LikedAthletes")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(max)");
 
@@ -66,7 +63,8 @@ namespace FreshAir.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.HasKey("AthleteId");
 
@@ -251,8 +249,8 @@ namespace FreshAir.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "df1be5f8-af98-48cf-95f1-9985d484ee00",
-                            ConcurrencyStamp = "ddc2185a-7436-4a82-96cf-a1ba4a2d4afe",
+                            Id = "6b7833fa-d8f2-46a7-adfa-265a99125ec5",
+                            ConcurrencyStamp = "684a8a19-526f-4e1b-8c9d-170bc56ce253",
                             Name = "Athlete",
                             NormalizedName = "ATHLETE"
                         });

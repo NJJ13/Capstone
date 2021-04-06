@@ -17,7 +17,10 @@ namespace FreshAir.Controllers
         {
             _logger = logger;
         }
-
+        public IActionResult AboutFreshAir()
+        {
+            return View();
+        }
         public IActionResult Index()
         {
             return View();
