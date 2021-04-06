@@ -46,20 +46,43 @@ namespace FreshAir.Controllers
             var view = _context.Athletes.Where(a => a.AthleteId == athlete.AthleteId).ToList();
             return View(view);
         }
-
         public IActionResult ChatWithAttendees(int? id)
         {
-            var attendeesList = _context.AthleteEvents.Where(ae => ae.EventId == id).ToList();
-            var attendees = new List<Athlete>();
-            foreach (var item in attendeesList)
-            {
-                attendees.Add(_context.Athletes.Find(item.AthleteId));
-            }
+            var chatHistory = _context.ChatHistories.Where(ch => ch.EventId == id).ToList();
+            ViewBag.EventId = id;
+            //var attendeesList = _context.AthleteEvents.Where(ae => ae.EventId == id).ToList();
+            //var attendees = new List<Athlete>();
+            //foreach (var item in attendeesList)
+            //{
+            //    attendees.Add(_context.Athletes.Find(item.AthleteId));
+            //}
             var athlete = GetCurrentUser();
-            attendees.Add(athlete);
+            //attendees.Add(athlete);
+            ViewBag.Chat = chatHistory;
             ViewBag.UserName = athlete.FirstName + " " + athlete.LastName;
-            return View(attendees);
+            return View();
         }
+        public IActionResult ChatWithAttendee(int? id)
+        {
+            var chatHistory = _context.ChatHistories.Where(ch => ch.EventId == id).ToList();
+            ViewBag.EventId = id;
+            var athlete = GetCurrentUser();
+            ViewBag.Chat = chatHistory;
+            ViewBag.UserName = athlete.FirstName + " " + athlete.LastName;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SaveMessage([FromBody] ChatHistory newMessage)
+        {
+            if(newMessage != null)
+            {
+                _context.ChatHistories.Add(newMessage);
+                _context.SaveChanges();
+            }
+            return Ok();
+        }
+
         // GET: Athlete/Details/5
         public IActionResult MyDetails()
         {

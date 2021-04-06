@@ -30,5 +30,6 @@ namespace FreshAir.Data
         public DbSet<Location> Locations { get; set; }
         public DbSet<FriendsList> FriendsLists { get; set; }
         public DbSet<AthleteEvent> AthleteEvents { get; set; }
+        public DbSet<ChatHistory> ChatHistories { get; set; }
     }
 }

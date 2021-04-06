@@ -1,10 +1,10 @@
-﻿@model IEnumerable<FreshAir.Models.Athlete>
+﻿@model IEnumerable<FreshAir.Models.ChatHistory>
 @*@{
         ViewData["Title"] = "ChatWithAttendees";
         Layout = "~/Views/Shared/_Layout.cshtml";
     }*@
 
-<h1>Chat With Attendees</h1>
+<h1>Chat With Event Attendees</h1>
 
 <div class="container">
     <div class="row">&nbsp;</div>
@@ -22,6 +22,9 @@
             <input type="button" id="sendButton" value="Send Message" />
         </div>
     </div>
+    <div>
+        <input type="hidden" value="@ViewBag.EventId" id="eventId">
+    </div>
 </div>
 <div class="row">
     <div class="col-12">
@@ -30,6 +33,10 @@
 </div>
 <div class="row">
     <div class="col-6">
+        @foreach (var item in @ViewBag.Chat)
+        {
+            <ul>@item.Message</ul>
+        }
         <ul id="messagesList"></ul>
     </div>
 </div>
