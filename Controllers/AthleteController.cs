@@ -111,11 +111,11 @@ namespace FreshAir.Controllers
             {
                 return RedirectToAction("MyDetails");
             }
-            var currentUserFollowers = _context.FriendsLists.Where(f => f.CurrentUserId == currentUser.AthleteId).ToList(); 
-            if (currentUserFollowers.Where(u=>u.FriendId == id).ToList().Count > 0)
-            {
-                return RedirectToAction("FriendDetails", "Athlete", id);
-            }
+            //var currentUserFollowers = _context.FriendsLists.Where(f => f.CurrentUserId == currentUser.AthleteId).ToList(); 
+            //if (currentUserFollowers.Where(u=>u.FriendId == id).ToList().Count > 0)
+            //{
+            //    return RedirectToAction("FriendDetails", id);
+            //}
             return View(athlete);
         }
         public async Task<IActionResult> FriendDetails(int? id)
@@ -138,23 +138,23 @@ namespace FreshAir.Controllers
 
             return View(athlete);
         }
-        [HttpPatch]
         public async Task<IActionResult> Follow(int? id)
         {
             var user = GetCurrentUser();
             var athleteToFollow = _context.Athletes.Find(id);
-            var newFollowing = new FriendsList();
-
-            newFollowing.CurrentAthlete = user;
-            newFollowing.CurrentUserId = user.AthleteId;
-            newFollowing.FriendAthlete = athleteToFollow;
-            newFollowing.FriendId = athleteToFollow.AthleteId;
-
-            _context.FriendsLists.Add(newFollowing);
-            await _context.SaveChangesAsync();
+            if (_context.FriendsLists.Find(user.AthleteId, athleteToFollow.AthleteId) == null)
+            {
+                var newFollowing = new FriendsList();
+                newFollowing.CurrentAthlete = user;
+                newFollowing.CurrentUserId = user.AthleteId;
+                newFollowing.FriendAthlete = athleteToFollow;
+                newFollowing.FriendId = athleteToFollow.AthleteId;
+                _context.FriendsLists.Add(newFollowing);
+                await _context.SaveChangesAsync();
+            }
+            
             return RedirectToAction("FollowedAthletes");
         }
-        [HttpPatch]
         public async Task<IActionResult> Unfollow(int? id)
         {
             var user = GetCurrentUser();
@@ -399,6 +399,7 @@ namespace FreshAir.Controllers
         
         public IActionResult AthletesAttending(int? id)
         {
+            var user = GetCurrentUser();
             var athletesAttendingId = _context.AthleteEvents.Where(ae => ae.EventId == id).ToList();
             List<Athlete> attendingAthletes = new List<Athlete>();
             foreach (var item in athletesAttendingId)
@@ -537,20 +538,15 @@ namespace FreshAir.Controllers
         {
             var athlete = GetCurrentUser();
             var eventsAtLocation = _context.Events.Where(e => e.LocationId == id).ToList();
+            var removeEventsHosted = eventsAtLocation.Where(e => e.HostAthleteId != athlete.AthleteId).ToList();
             var eventsAttended = _context.AthleteEvents.Where(ae => ae.AthleteId == athlete.AthleteId).ToList();
             foreach (var item in eventsAttended)
             {
                 var eventToRemove = _context.Events.Find(item.EventId);
-                eventsAtLocation.Remove(eventToRemove);
+                removeEventsHosted.Remove(eventToRemove);
             }
-            foreach (var item in eventsAtLocation)
-            {
-                if (item.HostAthleteId == athlete.AthleteId)
-                {
-                    eventsAtLocation.Remove(item);
-                }
-            }
-            var locationEvents = RemoveExpiredEvents(eventsAtLocation);
+            
+            var locationEvents = RemoveExpiredEvents(removeEventsHosted);
 
             return View(locationEvents);
         }
