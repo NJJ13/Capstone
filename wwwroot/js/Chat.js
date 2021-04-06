@@ -26,7 +26,6 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     var eventId = document.getElementById("eventId").value;
     var currentDate = new Date();
     var dateString = (currentDate.getMonth() + 1) + '/' + currentDate.getDate() + '/' + currentDate.getFullYear() + " " + currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
-    //var dateString = currentDate.toLocaleDateString() + " " + currentDate.toTimeString();
     var fullMessage = user + " says " + message + " at " + dateString;
     $.ajax({
         url: 'https://localhost:44398/Athlete/SaveMessage',
