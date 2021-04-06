@@ -44,6 +44,7 @@ namespace FreshAir
             {
                 config.Filters.Add(typeof(GlobalRouting));
             });
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddControllersWithViews().AddJsonOptions(o =>
             {
                 o.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
